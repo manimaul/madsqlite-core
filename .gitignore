@@ -1,0 +1,13 @@
+/.idea
+.DS_Store
+/captures
+.externalNativeBuild
+*.swp
+cmake-build-debug/
+
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
