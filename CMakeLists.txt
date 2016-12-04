@@ -9,7 +9,7 @@ set(SOURCE_FILES
         ${SRC_MAIN_DIR}/Cursor.cpp
         ${SRC_MAIN_DIR}/Database.cpp
         ${SRC_MAIN_DIR}/Util.cpp
-        ${SRC_MAIN_DIR}/sqlite-amalgamation-3140200/sqlite3.c)
+        ${SRC_MAIN_DIR}/sqlite-amalgamation/sqlite3.c)
 
 add_definitions(-DSQLITE_ENABLE_RTREE)
 #add_definitions(-DSQLITE_ENABLE_FTS4)
