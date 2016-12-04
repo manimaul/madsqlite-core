@@ -3,6 +3,7 @@
 #include "MadDatabase.hpp"
 
 using namespace std;
+using namespace madsqlite;
 
 /*
  * How to find java class,field and method signatures:
@@ -94,24 +95,24 @@ Java_io_madrona_madsqlite_JniBridge_moveToFirst(JNIEnv,
                                                 jclass,
                                                 jlong nativePtr) {
 
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    return (jboolean) cursor->moveToFirst();
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    return (jboolean) q->moveToFirst();
 }
 
 JNIEXPORT jboolean JNICALL
 Java_io_madrona_madsqlite_JniBridge_moveToNext(JNIEnv,
                                                jclass,
                                                jlong nativePtr) {
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    return (jboolean) cursor->moveToNext();
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    return (jboolean) q->moveToNext();
 }
 
 JNIEXPORT jboolean JNICALL
 Java_io_madrona_madsqlite_JniBridge_isAfterLast(JNIEnv,
                                                 jclass,
                                                 jlong nativePtr) {
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    return (jboolean) cursor->isAfterLast();
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    return (jboolean) q->isAfterLast();
 }
 
 JNIEXPORT jstring JNICALL
@@ -119,8 +120,8 @@ Java_io_madrona_madsqlite_JniBridge_getString(JNIEnv *env,
                                               jclass,
                                               jlong nativePtr,
                                               jint columnIndex) {
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    auto str = cursor->getString(columnIndex);
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    auto str = q->getString(columnIndex);
     return env->NewStringUTF(str.c_str());
 }
 
@@ -129,8 +130,8 @@ Java_io_madrona_madsqlite_JniBridge_getBlob(JNIEnv *env,
                                             jclass,
                                             jlong nativePtr,
                                             jint columnIndex) {
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    auto vec = cursor->getBlob(columnIndex);
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    auto vec = q->getBlob(columnIndex);
     jbyteArray retVal = env->NewByteArray((jsize) vec.size());
     jbyte *data = reinterpret_cast<jbyte *>(vec.data());
     env->SetByteArrayRegion(retVal, 0, (jsize) vec.size(), data);
@@ -143,8 +144,8 @@ Java_io_madrona_madsqlite_JniBridge_getLong(JNIEnv,
                                            jlong nativePtr,
                                            jint columnIndex) {
 
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    return (jlong) cursor->getInt(columnIndex);
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    return (jlong) q->getInt(columnIndex);
 }
 
 JNIEXPORT jdouble JNICALL
@@ -152,15 +153,15 @@ Java_io_madrona_madsqlite_JniBridge_getReal(JNIEnv,
                                             jclass,
                                             jlong nativePtr,
                                             jint columnIndex) {
-    Cursor *cursor = reinterpret_cast<Cursor *>(nativePtr);
-    return cursor->getReal(columnIndex);
+    MadQuery *q = reinterpret_cast<MadQuery *>(nativePtr);
+    return q->getReal(columnIndex);
 }
 
 JNIEXPORT jstring JNICALL
 Java_io_madrona_madsqlite_JniBridge_getError(JNIEnv *env,
                                              jclass,
                                              jlong dbPtr) {
-    Database *db = reinterpret_cast<Database *>(dbPtr);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
     return env->NewStringUTF(db->getError().c_str());
 }
 
@@ -168,7 +169,7 @@ JNIEXPORT void JNICALL
 Java_io_madrona_madsqlite_JniBridge_beginTransaction(JNIEnv,
                                                      jclass,
                                                      jlong dbPtr) {
-    Database *db = reinterpret_cast<Database *>(dbPtr);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
     db->beginTransaction();
 }
 
@@ -176,7 +177,7 @@ JNIEXPORT void JNICALL
 Java_io_madrona_madsqlite_JniBridge_rollbackTransaction(JNIEnv,
                                                         jclass,
                                                         jlong dbPtr) {
-    Database *db = reinterpret_cast<Database *>(dbPtr);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
     db->rollbackTransaction();
 }
 
@@ -184,7 +185,7 @@ JNIEXPORT void JNICALL
 Java_io_madrona_madsqlite_JniBridge_commitTransaction(JNIEnv,
                                                    jclass,
                                                    jlong dbPtr) {
-    Database *db = reinterpret_cast<Database *>(dbPtr);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
     db->commitTransaction();
 }
 
@@ -198,7 +199,7 @@ Java_io_madrona_madsqlite_JniBridge_insert(JNIEnv *env,
     const char *tableStr = env->GetStringUTFChars(table, 0);
     int keyCount = env->GetArrayLength(keys);
     int valueCount = env->GetArrayLength(keys);
-    ContentValues contentValues = {};
+    MadContentValues contentValues = {};
     if (keyCount == valueCount) {
         for (int i = 0; i < keyCount; i++) {
             jstring key = (jstring) (env->GetObjectArrayElement(keys, i));
@@ -241,7 +242,7 @@ Java_io_madrona_madsqlite_JniBridge_insert(JNIEnv *env,
             }
             env->ReleaseStringUTFChars(key, keyStr);
         }
-        Database *db = reinterpret_cast<Database *>(dbPtr);
+        MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
         bool retVal = db->insert(tableStr, contentValues);
         env->ReleaseStringUTFChars(table, tableStr);
         return (jboolean) retVal;
@@ -256,7 +257,7 @@ Java_io_madrona_madsqlite_JniBridge_exec(JNIEnv *env,
                                          jlong dbPtr,
                                          jstring sql) {
     const char *sqlStr = env->GetStringUTFChars(sql, 0);
-    Database *db = reinterpret_cast<Database *>(dbPtr);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
     int changes = db->exec(sqlStr);
     env->ReleaseStringUTFChars(sql, sqlStr);
     return reinterpret_cast<jint>(changes);
@@ -268,9 +269,9 @@ Java_io_madrona_madsqlite_JniBridge_query(JNIEnv *env,
                                           jlong dbPtr,
                                           jstring query,
                                           jobjectArray args) {
-    Database *db = reinterpret_cast<Database *>(dbPtr);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(dbPtr);
     const char *queryStr = env->GetStringUTFChars(query, 0);
-    Cursor *cursor;
+    MadQuery *q;
     if (args) {
         int count = env->GetArrayLength(args);
         auto argsVector = vector<string>();
@@ -281,31 +282,31 @@ Java_io_madrona_madsqlite_JniBridge_query(JNIEnv *env,
             env->ReleaseStringUTFChars(str, rawString);
         }
         auto c = db->query(queryStr, argsVector);
-        cursor = new Cursor(move(c));
+        q = new MadQuery(move(c));
     } else {
         auto c = db->query(queryStr);
-        cursor = new Cursor(move(c));
+        q = new MadQuery(move(c));
     }
     env->ReleaseStringUTFChars(query, queryStr);
-    return reinterpret_cast<jlong>(cursor);
+    return reinterpret_cast<jlong>(q);
 }
 
 JNIEXPORT jlong JNICALL
-Java_io_madrona_madsqlite_JniBridge_openDatabase(JNIEnv *env,
+Java_io_madrona_madsqlite_JniBridge_openMadDatabase(JNIEnv *env,
                                                  jclass,
                                                  jstring absPath) {
     if (absPath) {
         const char *path = env->GetStringUTFChars(absPath, 0);
-        jlong retVal = reinterpret_cast<jlong>(new Database(path));
+        jlong retVal = reinterpret_cast<jlong>(new MadDatabase(path));
         env->ReleaseStringUTFChars(absPath, path);
         return retVal;
     } else {
-        return reinterpret_cast<jlong>(new Database());
+        return reinterpret_cast<jlong>(new MadDatabase());
     }
 }
 
 JNIEXPORT void JNICALL
-Java_io_madrona_madsqlite_JniBridge_closeDatabase(JNIEnv,
+Java_io_madrona_madsqlite_JniBridge_closeMadDatabase(JNIEnv,
                                                   jclass,
                                                   jlong nativePtr) {
     void *db = reinterpret_cast<void *>(nativePtr);
@@ -313,7 +314,7 @@ Java_io_madrona_madsqlite_JniBridge_closeDatabase(JNIEnv,
 }
 
 JNIEXPORT void JNICALL
-Java_io_madrona_madsqlite_JniBridge_closeCursor(JNIEnv,
+Java_io_madrona_madsqlite_JniBridge_closeMadQuery(JNIEnv,
                                                 jclass,
                                                 jlong nativePtr) {
     void *db = reinterpret_cast<void *>(nativePtr);
