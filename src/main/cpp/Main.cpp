@@ -2,42 +2,45 @@
 
 #include <string>
 #include <iostream>
-#include "Database.hpp"
+#include "MadDatabase.hpp"
 
-static void print(std::string const &msg, double &value) {
-    std::cout << msg << " " << value << std::endl;
+using namespace madsqlite;
+using namespace std;
+
+static void print(string const &msg, double &value) {
+    cout << msg << " " << value << endl;
 }
 
-static void print(std::string const &msg, std::string &value) {
-    std::cout << msg << " " << value << std::endl;
+static void print(string const &msg, string &value) {
+    cout << msg << " " << value << endl;
 }
 
-static void print(std::string const &msg, int &value) {
-    std::cout << msg << " " << value << std::endl;
+static void print(string const &msg, int &value) {
+    cout << msg << " " << value << endl;
 }
 
-static void print(std::string const &msg, uint64_t &value) {
-    std::cout << msg << " " << value << std::endl;
+static void print(string const &msg, sqlite3_int64 &value) {
+    cout << msg << " " << value << endl;
 }
 
-static void print(std::string const &msg, std::vector<byte> &blob) {
-    std::cout << msg << " ";
+static void print(string const &msg, vector<byte> &blob) {
+    cout << msg << " ";
     for (byte &b : blob) {
-        std::cout << b;
+        cout << b;
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
 int main() {
     // Create an in-memory database
-    auto db = Database();
+    auto db = MadDatabase();
     db.exec("CREATE TABLE test(x INTEGER, "
                     "y TEXT, "
                     "z BLOB);");
 
     // Insert in database
-    auto cv = ContentValues();
-    char *blob = "i'm a blob";
+    auto cv = MadContentValues();
+    const char *blob = "i'm a blob";
     cv.putBlob("z", blob, strlen(blob));
     cv.putInteger("y", 7070);
     cv.putInteger("x", 1970);
@@ -53,11 +56,11 @@ int main() {
     auto cursor = db.query("SELECT * FROM test");
     cursor.moveToFirst();
     while (!cursor.isAfterLast()) {
-        uint64_t storedX = cursor.getInt(0);
+        sqlite3_int64 storedX = cursor.getInt(0);
         print("x:", storedX);
-        std::string storedY = cursor.getString(1);
+        string storedY = cursor.getString(1);
         print("y:", storedY);
-        std::vector<byte> storedBlob = cursor.getBlob(2);
+        vector<byte> storedBlob = cursor.getBlob(2);
         print("z:", storedBlob);
         cursor.moveToNext();
     }

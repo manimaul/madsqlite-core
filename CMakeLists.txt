@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.4.1)
 
 set(SRC_MAIN_DIR src/main/cpp)
 
-include_directories(${SRC_MAIN_DIR}/sqlite-amalgamation-3140200/ ${SRC_MAIN_DIR}/)
+include_directories(${SRC_MAIN_DIR}/sqlite-amalgamation/ ${SRC_MAIN_DIR}/)
 
 set(SOURCE_FILES
-        ${SRC_MAIN_DIR}/ContentValues.cpp
-        ${SRC_MAIN_DIR}/Cursor.cpp
-        ${SRC_MAIN_DIR}/Database.cpp
-        ${SRC_MAIN_DIR}/Util.cpp
+        ${SRC_MAIN_DIR}/MadConstants.hpp
+        ${SRC_MAIN_DIR}/MadContentValues.cpp
+        ${SRC_MAIN_DIR}/MadQuery.cpp
+        ${SRC_MAIN_DIR}/MadDatabase.cpp
+        ${SRC_MAIN_DIR}/MadUtil.hpp
         ${SRC_MAIN_DIR}/sqlite-amalgamation/sqlite3.c)
 
 add_definitions(-DSQLITE_ENABLE_RTREE)
@@ -18,7 +19,7 @@ add_definitions(-DSQLITE_ENABLE_FTS5)
 
 if (ANDROID)
     set(SOURCE_FILES
-            ${SRC_MAIN_DIR}/MadSqlite.cpp
+            ${SRC_MAIN_DIR}/MadSqliteJni.cpp
             ${SOURCE_FILES})
 else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")

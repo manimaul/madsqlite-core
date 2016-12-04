@@ -2,26 +2,29 @@
 // Created by William Kamp on 10/10/16.
 //
 
-#include "Cursor.hpp"
+#include "MadQuery.hpp"
 
 #define CURSOR_STEP_UNKNOWN -1
+
+using namespace madsqlite;
+using namespace std;
 
 //region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //endregion
 
 //region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cursor::Cursor(sqlite3_stmt *statement) : statement(statement) {
+MadQuery::MadQuery(sqlite3_stmt *statement) : statement(statement) {
 }
 
-Cursor::Cursor(Cursor &&curs) {
-    statement = curs.statement;
-    position = curs.position;
-    curs.statement = nullptr;
-    curs.position = 0;
+MadQuery::MadQuery(MadQuery &&query) {
+    statement = query.statement;
+    position = query.position;
+    query.statement = nullptr;
+    query.position = 0;
 }
 
-Cursor::~Cursor() {
+MadQuery::~MadQuery() {
     if (statement) {
         sqlite3_finalize(statement);
     }
@@ -31,7 +34,7 @@ Cursor::~Cursor() {
 
 //region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bool Cursor::moveToFirst() {
+bool MadQuery::moveToFirst() {
     if (sqlite3_reset(statement) == SQLITE_OK) {
         stepResult = sqlite3_step(statement);
         position = 0;
@@ -42,7 +45,7 @@ bool Cursor::moveToFirst() {
     return false;
 }
 
-bool Cursor::moveToNext() {
+bool MadQuery::moveToNext() {
     if (!isAfterLast()) {
         stepResult = sqlite3_step(statement);
         if (stepResult == SQLITE_ROW || SQLITE_DONE) {
@@ -53,31 +56,31 @@ bool Cursor::moveToNext() {
     return false;
 }
 
-bool Cursor::isAfterLast() {
+bool MadQuery::isAfterLast() {
     return stepResult > CURSOR_STEP_UNKNOWN && stepResult != SQLITE_ROW;
 }
 
-const std::string Cursor::getString(int columnIndex) const {
+const string MadQuery::getString(int columnIndex) const {
     const unsigned char* text = sqlite3_column_text(statement, columnIndex);
     if (text) {
-        return std::string(reinterpret_cast<const char*>(text));
+        return string(reinterpret_cast<const char*>(text));
     }
     return "";
 }
 
-const std::vector<byte> Cursor::getBlob(int columnIndex) const {
+const vector<byte> MadQuery::getBlob(int columnIndex) const {
     const void *blob = sqlite3_column_blob(statement, columnIndex);
     int sz = sqlite3_column_bytes(statement, columnIndex);
     const byte *charBuf = reinterpret_cast<const byte*>(blob);
-    std::vector<byte> value(charBuf, charBuf + sz);
+    vector<byte> value(charBuf, charBuf + sz);
     return value;
 }
 
-sqlite3_int64 Cursor::getInt(int columnIndex) {
+sqlite3_int64 MadQuery::getInt(int columnIndex) {
     return (sqlite3_int64) sqlite3_column_int64(statement, columnIndex);
 }
 
-double Cursor::getReal(int columnIndex) {
+double MadQuery::getReal(int columnIndex) {
     return sqlite3_column_double(statement, columnIndex);
 }
 

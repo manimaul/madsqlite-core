@@ -226,7 +226,7 @@ SQLITE_API const char *sqlite3_compileoption_get(int N);
 SQLITE_API int sqlite3_threadsafe(void);
 
 /*
-** CAPI3REF: Database Connection Handle
+** CAPI3REF: MadDatabase Connection Handle
 ** KEYWORDS: {database connection} {database connections}
 **
 ** Each open SQLite database is represented by a pointer to an instance of
@@ -279,7 +279,7 @@ typedef sqlite_uint64 sqlite3_uint64;
 #endif
 
 /*
-** CAPI3REF: Closing A Database Connection
+** CAPI3REF: Closing A MadDatabase Connection
 ** DESTRUCTOR: sqlite3
 **
 ** ^The sqlite3_close() and sqlite3_close_v2() routines are destructors
@@ -1893,7 +1893,7 @@ struct sqlite3_mem_methods {
 #define SQLITE_CONFIG_STMTJRNL_SPILL      26  /* int nByte */
 
 /*
-** CAPI3REF: Database Connection Configuration Options
+** CAPI3REF: MadDatabase Connection Configuration Options
 **
 ** These constants are the available integer configuration options that
 ** can be passed as the second argument to the [sqlite3_db_config()] interface.
@@ -2954,7 +2954,7 @@ SQLITE_API int sqlite3_trace_v2(
 SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 
 /*
-** CAPI3REF: Opening A New Database Connection
+** CAPI3REF: Opening A New MadDatabase Connection
 ** CONSTRUCTOR: sqlite3
 **
 ** ^These routines open an SQLite database file as specified by the 
@@ -3109,7 +3109,7 @@ SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 **  <li> <b>nolock</b>: ^The nolock parameter is a boolean query parameter
 **     which if set disables file locking in rollback journal modes.  This
 **     is useful for accessing a database on a filesystem that does not
-**     support locking.  Caution:  Database corruption might result if two
+**     support locking.  Caution:  MadDatabase corruption might result if two
 **     or more processes write to the same database and any one of those
 **     processes uses nolock=1.
 **
@@ -3181,15 +3181,15 @@ SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 ** See also: [sqlite3_temp_directory]
 */
 SQLITE_API int sqlite3_open(
-  const char *filename,   /* Database filename (UTF-8) */
+  const char *filename,   /* MadDatabase filename (UTF-8) */
   sqlite3 **ppDb          /* OUT: SQLite db handle */
 );
 SQLITE_API int sqlite3_open16(
-  const void *filename,   /* Database filename (UTF-16) */
+  const void *filename,   /* MadDatabase filename (UTF-16) */
   sqlite3 **ppDb          /* OUT: SQLite db handle */
 );
 SQLITE_API int sqlite3_open_v2(
-  const char *filename,   /* Database filename (UTF-8) */
+  const char *filename,   /* MadDatabase filename (UTF-8) */
   sqlite3 **ppDb,         /* OUT: SQLite db handle */
   int flags,              /* Flags */
   const char *zVfs        /* Name of VFS module to use */
@@ -3505,28 +3505,28 @@ SQLITE_API int sqlite3_limit(sqlite3*, int id, int newVal);
 ** </ol>
 */
 SQLITE_API int sqlite3_prepare(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* MadDatabase handle */
   const char *zSql,       /* SQL statement, UTF-8 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare_v2(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* MadDatabase handle */
   const char *zSql,       /* SQL statement, UTF-8 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare16(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* MadDatabase handle */
   const void *zSql,       /* SQL statement, UTF-16 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const void **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare16_v2(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* MadDatabase handle */
   const void *zSql,       /* SQL statement, UTF-16 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
@@ -3568,7 +3568,7 @@ SQLITE_API const char *sqlite3_sql(sqlite3_stmt *pStmt);
 SQLITE_API char *sqlite3_expanded_sql(sqlite3_stmt *pStmt);
 
 /*
-** CAPI3REF: Determine If An SQL Statement Writes The Database
+** CAPI3REF: Determine If An SQL Statement Writes The MadDatabase
 ** METHOD: sqlite3_stmt
 **
 ** ^The sqlite3_stmt_readonly(X) interface returns true (non-zero) if
@@ -4683,7 +4683,7 @@ SQLITE_API void *sqlite3_aggregate_context(sqlite3_context*, int nBytes);
 SQLITE_API void *sqlite3_user_data(sqlite3_context*);
 
 /*
-** CAPI3REF: Database Connection For Functions
+** CAPI3REF: MadDatabase Connection For Functions
 ** METHOD: sqlite3_context
 **
 ** ^The sqlite3_context_db_handle() interface returns a copy of
@@ -5070,11 +5070,11 @@ SQLITE_API int sqlite3_collation_needed16(
 ** of SQLite.
 */
 SQLITE_API int sqlite3_key(
-  sqlite3 *db,                   /* Database to be rekeyed */
+  sqlite3 *db,                   /* MadDatabase to be rekeyed */
   const void *pKey, int nKey     /* The key */
 );
 SQLITE_API int sqlite3_key_v2(
-  sqlite3 *db,                   /* Database to be rekeyed */
+  sqlite3 *db,                   /* MadDatabase to be rekeyed */
   const char *zDbName,           /* Name of the database */
   const void *pKey, int nKey     /* The key */
 );
@@ -5088,11 +5088,11 @@ SQLITE_API int sqlite3_key_v2(
 ** of SQLite.
 */
 SQLITE_API int sqlite3_rekey(
-  sqlite3 *db,                   /* Database to be rekeyed */
+  sqlite3 *db,                   /* MadDatabase to be rekeyed */
   const void *pKey, int nKey     /* The new key */
 );
 SQLITE_API int sqlite3_rekey_v2(
-  sqlite3 *db,                   /* Database to be rekeyed */
+  sqlite3 *db,                   /* MadDatabase to be rekeyed */
   const char *zDbName,           /* Name of the database */
   const void *pKey, int nKey     /* The new key */
 );
@@ -5194,7 +5194,7 @@ SQLITE_API int sqlite3_sleep(int);
 SQLITE_API SQLITE_EXTERN char *sqlite3_temp_directory;
 
 /*
-** CAPI3REF: Name Of The Folder Holding Database Files
+** CAPI3REF: Name Of The Folder Holding MadDatabase Files
 **
 ** ^(If this global variable is made to point to a string which is
 ** the name of a folder (a.k.a. directory), then all database files
@@ -5255,7 +5255,7 @@ SQLITE_API SQLITE_EXTERN char *sqlite3_data_directory;
 SQLITE_API int sqlite3_get_autocommit(sqlite3*);
 
 /*
-** CAPI3REF: Find The Database Handle Of A Prepared Statement
+** CAPI3REF: Find The MadDatabase Handle Of A Prepared Statement
 ** METHOD: sqlite3_stmt
 **
 ** ^The sqlite3_db_handle interface returns the [database connection] handle
@@ -5268,7 +5268,7 @@ SQLITE_API int sqlite3_get_autocommit(sqlite3*);
 SQLITE_API sqlite3 *sqlite3_db_handle(sqlite3_stmt*);
 
 /*
-** CAPI3REF: Return The Filename For A Database Connection
+** CAPI3REF: Return The Filename For A MadDatabase Connection
 ** METHOD: sqlite3
 **
 ** ^The sqlite3_db_filename(D,N) interface returns a pointer to a filename
@@ -5469,7 +5469,7 @@ SQLITE_API int sqlite3_enable_shared_cache(int);
 SQLITE_API int sqlite3_release_memory(int);
 
 /*
-** CAPI3REF: Free Memory Used By A Database Connection
+** CAPI3REF: Free Memory Used By A MadDatabase Connection
 ** METHOD: sqlite3
 **
 ** ^The sqlite3_db_release_memory(D) interface attempts to free as much heap
@@ -5616,7 +5616,7 @@ SQLITE_API SQLITE_DEPRECATED void sqlite3_soft_heap_limit(int N);
 */
 SQLITE_API int sqlite3_table_column_metadata(
   sqlite3 *db,                /* Connection handle */
-  const char *zDbName,        /* Database name or NULL */
+  const char *zDbName,        /* MadDatabase name or NULL */
   const char *zTableName,     /* Table name */
   const char *zColumnName,    /* Column name */
   char const **pzDataType,    /* OUTPUT: Declared data type */
@@ -6047,7 +6047,7 @@ struct sqlite3_vtab {
 };
 
 /*
-** CAPI3REF: Virtual Table Cursor Object
+** CAPI3REF: Virtual Table MadQuery Object
 ** KEYWORDS: sqlite3_vtab_cursor {virtual table cursor}
 **
 ** Every [virtual table module] implementation uses a subclass of the
@@ -6152,7 +6152,7 @@ typedef struct sqlite3_blob sqlite3_blob;
 **
 ** This function fails with SQLITE_ERROR if any of the following are true:
 ** <ul>
-**   <li> ^(Database zDb does not exist)^, 
+**   <li> ^(MadDatabase zDb does not exist)^,
 **   <li> ^(Table zTable does not exist within database zDb)^, 
 **   <li> ^(Table zTable is a WITHOUT ROWID table)^, 
 **   <li> ^(Column zColumn does not exist)^,
@@ -6644,7 +6644,7 @@ SQLITE_API int sqlite3_mutex_notheld(sqlite3_mutex*);
 SQLITE_API sqlite3_mutex *sqlite3_db_mutex(sqlite3*);
 
 /*
-** CAPI3REF: Low-Level Control Of Database Files
+** CAPI3REF: Low-Level Control Of MadDatabase Files
 ** METHOD: sqlite3
 **
 ** ^The [sqlite3_file_control()] interface makes a direct call to the
@@ -6863,7 +6863,7 @@ SQLITE_API int sqlite3_status64(
 #define SQLITE_STATUS_MALLOC_COUNT         9
 
 /*
-** CAPI3REF: Database Connection Status
+** CAPI3REF: MadDatabase Connection Status
 ** METHOD: sqlite3
 **
 ** ^This interface is used to retrieve runtime status information 
@@ -7466,7 +7466,7 @@ typedef struct sqlite3_backup sqlite3_backup;
 ** and sqlite3_backup_remaining() until after the next
 ** sqlite3_backup_step().)^
 **
-** <b>Concurrent Usage of Database Handles</b>
+** <b>Concurrent Usage of MadDatabase Handles</b>
 **
 ** ^The source [database connection] may be used by the application for other
 ** purposes while a backup operation is underway or being initialized.
@@ -7890,7 +7890,7 @@ SQLITE_API int sqlite3_wal_checkpoint(sqlite3 *db, const char *zDb);
 ** from SQL.
 */
 SQLITE_API int sqlite3_wal_checkpoint_v2(
-  sqlite3 *db,                    /* Database handle */
+  sqlite3 *db,                    /* MadDatabase handle */
   const char *zDb,                /* Name of attached database (or NULL) */
   int eMode,                      /* SQLITE_CHECKPOINT_* value */
   int *pnLog,                     /* OUT: Size of WAL log in frames */
@@ -8215,9 +8215,9 @@ SQLITE_API SQLITE_EXPERIMENTAL void *sqlite3_preupdate_hook(
   sqlite3 *db,
   void(*xPreUpdate)(
     void *pCtx,                   /* Copy of third arg to preupdate_hook() */
-    sqlite3 *db,                  /* Database handle */
+    sqlite3 *db,                  /* MadDatabase handle */
     int op,                       /* SQLITE_UPDATE, DELETE or INSERT */
-    char const *zDb,              /* Database name */
+    char const *zDb,              /* MadDatabase name */
     char const *zName,            /* Table name */
     sqlite3_int64 iKey1,          /* Rowid of row about to be deleted/updated */
     sqlite3_int64 iKey2           /* New rowid value (for a rowid UPDATE) */
@@ -8242,7 +8242,7 @@ SQLITE_API SQLITE_EXPERIMENTAL int sqlite3_preupdate_new(sqlite3 *, int, sqlite3
 SQLITE_API int sqlite3_system_errno(sqlite3*);
 
 /*
-** CAPI3REF: Database Snapshot
+** CAPI3REF: MadDatabase Snapshot
 ** KEYWORDS: {snapshot}
 ** EXPERIMENTAL
 **
@@ -8270,7 +8270,7 @@ SQLITE_API int sqlite3_system_errno(sqlite3*);
 typedef struct sqlite3_snapshot sqlite3_snapshot;
 
 /*
-** CAPI3REF: Record A Database Snapshot
+** CAPI3REF: Record A MadDatabase Snapshot
 ** EXPERIMENTAL
 **
 ** ^The [sqlite3_snapshot_get(D,S,P)] interface attempts to make a
@@ -8559,7 +8559,7 @@ typedef struct sqlite3_changeset_iter sqlite3_changeset_iter;
 ** to the database when the session object is created.
 */
 int sqlite3session_create(
-  sqlite3 *db,                    /* Database handle */
+  sqlite3 *db,                    /* MadDatabase handle */
   const char *zDb,                /* Name of db (e.g. "main") */
   sqlite3_session **ppSession     /* OUT: New session object */
 );
@@ -9388,7 +9388,7 @@ int sqlite3changegroup_output(
 void sqlite3changegroup_delete(sqlite3_changegroup*);
 
 /*
-** CAPI3REF: Apply A Changeset To A Database
+** CAPI3REF: Apply A Changeset To A MadDatabase
 **
 ** Apply a changeset to a database. This function attempts to update the
 ** "main" database attached to handle db with the changes found in the

@@ -4,6 +4,7 @@
 .externalNativeBuild
 *.swp
 cmake-build-debug/
+Project.cbp
 
 CMakeCache.txt
 CMakeFiles

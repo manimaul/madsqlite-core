@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
-#include "Database.hpp"
+#include "MadDatabase.hpp"
+
+using namespace std;
 
 /*
  * How to find java class,field and method signatures:
@@ -77,9 +79,9 @@ float jobjectToFloat(JNIEnv *env, jobject &value) {
     return env->CallFloatMethod(value, floatValueMethodId);
 }
 
-std::string jobjectToString(JNIEnv *env, jobject &value) {
+string jobjectToString(JNIEnv *env, jobject &value) {
     const char *strValue = env->GetStringUTFChars((jstring) value, 0);
-    std::string retVal(strValue);
+    string retVal(strValue);
     env->ReleaseStringUTFChars((jstring) value, strValue);
     return retVal;
 }
@@ -271,7 +273,7 @@ Java_io_madrona_madsqlite_JniBridge_query(JNIEnv *env,
     Cursor *cursor;
     if (args) {
         int count = env->GetArrayLength(args);
-        auto argsVector = std::vector<std::string>();
+        auto argsVector = vector<string>();
         for (int i = 0; i < count; i++) {
             jstring str = (jstring) (env->GetObjectArrayElement(args, i));
             const char *rawString = env->GetStringUTFChars(str, 0);
@@ -279,10 +281,10 @@ Java_io_madrona_madsqlite_JniBridge_query(JNIEnv *env,
             env->ReleaseStringUTFChars(str, rawString);
         }
         auto c = db->query(queryStr, argsVector);
-        cursor = new Cursor(std::move(c));
+        cursor = new Cursor(move(c));
     } else {
         auto c = db->query(queryStr);
-        cursor = new Cursor(std::move(c));
+        cursor = new Cursor(move(c));
     }
     env->ReleaseStringUTFChars(query, queryStr);
     return reinterpret_cast<jlong>(cursor);

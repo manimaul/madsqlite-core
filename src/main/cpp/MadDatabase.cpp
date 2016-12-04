@@ -3,23 +3,26 @@
 //
 
 #include <iostream>
-#include "Database.hpp"
-#include "Util.cpp"
+#include "MadDatabase.hpp"
+#include "MadUtil.hpp"
+
+using namespace madsqlite;
+using namespace std;
 
 //region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //endregion
 
 //region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Database::Database() {
+MadDatabase::MadDatabase() {
     sqlite3_open(":memory:", &db);
 }
 
-Database::Database(std::string const &dbPath) {
+MadDatabase::MadDatabase(string const &dbPath) {
     sqlite3_open(dbPath.c_str(), &db);
 }
 
-Database::~Database() {
+MadDatabase::~MadDatabase() {
     sqlite3_close(db);
 }
 
@@ -27,37 +30,37 @@ Database::~Database() {
 
 //region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void Database::beginTransaction() {
+void MadDatabase::beginTransaction() {
     if (!isInTransaction) {
         execInternal("BEGIN");
         isInTransaction = true;
     }
 }
 
-void Database::rollbackTransaction() {
+void MadDatabase::rollbackTransaction() {
     if (isInTransaction) {
         execInternal("ROLLBACK");
         isInTransaction = false;
     }
 }
 
-void Database::commitTransaction() {
+void MadDatabase::commitTransaction() {
     if (isInTransaction) {
         execInternal("COMMIT");
         isInTransaction = false;
     }
 }
 
-int Database::exec(std::string const &sql) {
-    std::string upper = upperCaseString(sql);
+int MadDatabase::exec(string const &sql) {
+    string upper = upperCaseString(sql);
     if (transactionKeyWords.find(upper) != transactionKeyWords.end()) {
         return 0;
     }
     return execInternal(sql);
 }
 
-std::string Database::getError() {
-    auto err = std::string(sqlite3_errmsg(db));
+string MadDatabase::getError() {
+    auto err = string(sqlite3_errmsg(db));
     if (err.compare("not an error") == 0 || err.compare("unknown error") == 0) {
         return "";
     } else {
@@ -65,19 +68,19 @@ std::string Database::getError() {
     }
 }
 
-int Database::execInternal(std::string const &sql) {
+int MadDatabase::execInternal(string const &sql) {
     char *errorMessage = 0;
     int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errorMessage);
     if (rc == SQLITE_OK) {
-        std::cout << "exec: " << sql << " " << rc << std::endl;
+        cout << "exec: " << sql << " " << rc << endl;
     } else {
-        std::cout << "exec: " << sql << " " << rc << " " << errorMessage << std::endl;
+        cout << "exec: " << sql << " " << rc << " " << errorMessage << endl;
         sqlite3_free(errorMessage);
     }
     return sqlite3_changes(db);
 }
 
-bool Database::insert(std::string const &table, ContentValues &values) {
+bool MadDatabase::insert(string const &table, MadContentValues &values) {
     if (values.isEmpty()) {
         return false;
     }
@@ -85,8 +88,8 @@ bool Database::insert(std::string const &table, ContentValues &values) {
      * INSERT INTO [table] ([row1], [row2]) VALUES (0,"value");
      * INSERT INTO [table] ([?], [?]) VALUES (?,?);
      */
-    std::string sql = "INSERT INTO [" + table + "] (";
-    std::string bindings = " VALUES (";
+    string sql = "INSERT INTO [" + table + "] (";
+    string bindings = " VALUES (";
     auto keys = values.keys();
     for (auto key: keys) {
         sql += "[" + key + "] ";
@@ -103,42 +106,42 @@ bool Database::insert(std::string const &table, ContentValues &values) {
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        std::cout << "Could not prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        cout << "Could not prepare statement: " << sqlite3_errmsg(db) << endl;
         return false;
     }
 
     for (int i = 0; i < keys.size(); ++i) {
-        std::string key = keys.at((unsigned long) i);
+        string key = keys.at((unsigned long) i);
         switch (values.typeForKey(key)) {
-            case ContentValues::NONE: {
+            case MadContentValues::NONE: {
                 break;
             }
-            case ContentValues::INT: {
+            case MadContentValues::INT: {
                 if (sqlite3_bind_int64(stmt, i + 1, values.getAsInteger(key)) != SQLITE_OK) {
-                    std::cout << "Could not bind statement." << std::endl;
+                    cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case ContentValues::REAL: {
+            case MadContentValues::REAL: {
                 if (sqlite3_bind_double(stmt, i + 1, values.getAsReal(key)) != SQLITE_OK) {
-                    std::cout << "Could not bind statement." << std::endl;
+                    cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case ContentValues::TEXT: {
-                const std::string &text = values.getAsText(key);
+            case MadContentValues::TEXT: {
+                const string &text = values.getAsText(key);
                 if (sqlite3_bind_text(stmt, i + 1, text.c_str(), (int) text.length(), SQLITE_TRANSIENT) != SQLITE_OK) {
-                    std::cout << "Could not bind statement." << std::endl;
+                    cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case ContentValues::BLOB: {
-                const std::vector<byte> vector = values.getAsBlob(key);
+            case MadContentValues::BLOB: {
+                const vector<byte> vector = values.getAsBlob(key);
                 if (sqlite3_bind_blob(stmt, i + 1, vector.data(), (int) vector.size(), SQLITE_TRANSIENT) != SQLITE_OK) {
-                    std::cout << "Could not bind statement." << std::endl;
+                    cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
@@ -149,30 +152,30 @@ bool Database::insert(std::string const &table, ContentValues &values) {
     // sqlite3_reset(stmt);
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
-        std::cout << "Could not step (execute) stmt." << std::endl;
+        cout << "Could not step (execute) stmt." << endl;
         return false;
     }
 
     return true;
 }
 
-Cursor Database::query(std::string const &sql, std::vector<std::string> const &args) {
+MadQuery MadDatabase::query(string const &sql, vector<string> const &args) {
     sqlite3_stmt *stmt = nullptr;
     int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        std::cout << "Could not prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        cout << "Could not prepare statement: " << sqlite3_errmsg(db) << endl;
     }
     for (int i = 0; i < args.size(); ++i) {
-        const std::string &str = args.at((unsigned long) i);
+        const string &str = args.at((unsigned long) i);
         rc = sqlite3_bind_text(stmt, i + 1, str.c_str(), (int) str.length(), SQLITE_TRANSIENT);
         if (rc != SQLITE_OK) {
-            std::cout << "Could not bind text: " << str << std::endl;
+            cout << "Could not bind text: " << str << endl;
         }
     }
-    return Cursor(stmt);
+    return MadQuery(stmt);
 }
 
-Cursor Database::query(std::string const &sql) {
+MadQuery MadDatabase::query(string const &sql) {
     return query(sql, {});
 }
 

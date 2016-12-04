@@ -4,25 +4,28 @@
 
 #include <iostream>
 #include <sstream>
-#include "ContentValues.hpp"
+#include "MadContentValues.hpp"
 
 #ifdef ANDROID
 #include <arpa/inet.h>
 #endif
 
-const std::unordered_set<std::string> &ContentValues::keySet() const {
+using namespace madsqlite;
+using namespace std;
+
+const unordered_set<string> &MadContentValues::keySet() const {
     return _keys;
 }
 
-const std::vector<std::string> ContentValues::keys() const {
-    return std::vector<std::string>(_keys.begin(), _keys.end());
+const vector<string> MadContentValues::keys() const {
+    return vector<string>(_keys.begin(), _keys.end());
 }
 
-bool ContentValues::containsKey(std::string const &key) {
+bool MadContentValues::containsKey(string const &key) {
     return _keys.find(key) != _keys.end();
 }
 
-void ContentValues::putData(std::string const &key, ContentValues::Data &data) {
+void MadContentValues::putData(string const &key, MadContentValues::Data &data) {
     if (containsKey(key)) {
         long i = _dataMap.at(key);
         _values[i] = data;
@@ -34,12 +37,12 @@ void ContentValues::putData(std::string const &key, ContentValues::Data &data) {
     _keys.emplace(key);
 }
 
-ContentValues::Data ContentValues::getData(std::string const &key) {
+MadContentValues::Data MadContentValues::getData(string const &key) {
     long i = _dataMap.at(key);
     return _values[i];
 }
 
-sqlite3_int64 ContentValues::getAsInteger(std::string const &key) {
+sqlite3_int64 MadContentValues::getAsInteger(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -64,7 +67,7 @@ sqlite3_int64 ContentValues::getAsInteger(std::string const &key) {
     return 0;
 }
 
-double ContentValues::getAsReal(std::string const &key) {
+double MadContentValues::getAsReal(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -89,7 +92,7 @@ double ContentValues::getAsReal(std::string const &key) {
     return 0;
 }
 
-std::string ContentValues::getAsText(std::string const &key) {
+string MadContentValues::getAsText(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -97,92 +100,93 @@ std::string ContentValues::getAsText(std::string const &key) {
 #ifdef ANDROID
                 return numberToString(data.dataInt);
 #else
-                return std::to_string(data.dataInt);
+                return to_string(data.dataInt);
 #endif
             case REAL:
 #ifdef ANDROID
                 return numberToString(data.dataReal);
 #else
-                return std::to_string(data.dataReal);
+                return to_string(data.dataReal);
 #endif
             case TEXT:
                 return data.dataText;
             case BLOB:
-                return std::string(data.dataBlob.begin(), data.dataBlob.end());
+                return string(data.dataBlob.begin(), data.dataBlob.end());
             case NONE:
             default:
                 break;
         }
     }
-    return std::string();
+    return string();
 }
 
-std::vector<byte> ContentValues::getAsBlob(std::string const &key) {
+vector<byte> MadContentValues::getAsBlob(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataBlob;
     }
-    return std::vector<byte>();
+    return vector<byte>();
 }
 
-void ContentValues::putInteger(std::string const &key, sqlite3_int64 value) {
+void MadContentValues::putInteger(string const &key, sqlite3_int64 value) {
     Data d = {value};
     putData(key, d);
 }
 
-void ContentValues::putReal(std::string const &key, double value) {
+void MadContentValues::putReal(string const &key, double value) {
     Data d = {value};
     putData(key, d);
 }
 
-void ContentValues::putString(std::string const &key, std::string const &value) {
+void MadContentValues::putString(string const &key, string const &value) {
     Data d = {value};
     putData(key, d);
 }
 
-void ContentValues::putBlob(std::string const &key, std::vector<byte> &value) {
+void MadContentValues::putBlob(string const &key, vector<byte> &value) {
     Data d = {value};
     putData(key, d);
 }
 
-bool ContentValues::isEmpty() {
+bool MadContentValues::isEmpty() {
     return _keys.size() <= 0;
 }
 
-ContentValues::DataType ContentValues::typeForKey(std::string const &key) {
+MadContentValues::DataType MadContentValues::typeForKey(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataType;
     }
     return NONE;
 }
 
-void ContentValues::clear() {
+void MadContentValues::clear() {
     _keys.clear();
     _values.clear();
     _dataMap.clear();
 }
 
-void ContentValues::putBlob(std::string const &key, void *blob, size_t sz) {
-    byte *charBuf = (byte*)blob;
-    std::vector<byte> value(charBuf, charBuf + sz);
+void MadContentValues::putBlob(string const &key, const void *blob, size_t sz) {
+    byte *charBuf = (byte *) blob;
+    vector<byte> value(charBuf, charBuf + sz);
     Data d = {value};
     putData(key, d);
 }
 
-double ContentValues::stringToDouble(std::string const &str){
-    std::stringstream ss(str);
+double MadContentValues::stringToDouble(string const &str) {
+    stringstream ss(str);
     double result;
     return ss >> result ? result : 0;
 }
 
-sqlite3_int64 ContentValues::stringToInt(std::string const &str){
-    std::stringstream ss(str);
+sqlite3_int64 MadContentValues::stringToInt(string const &str) {
+    stringstream ss(str);
     sqlite3_int64 result;
     return ss >> result ? result : 0;
 }
 
-template <typename T> std::string
-ContentValues::numberToString(T number) {
-    std::stringstream ss;
+template<typename T>
+string
+MadContentValues::numberToString(T number) {
+    stringstream ss;
     ss << number;
     return ss.str();
 }

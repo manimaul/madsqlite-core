@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
-using byte = unsigned char;
+namespace madsqlite {
+    using byte = unsigned char;
+}
 
 #endif //PROJECT_CONSTANTS_H
