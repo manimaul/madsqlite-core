@@ -13,6 +13,20 @@
 using namespace madsqlite;
 using namespace std;
 
+//region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//endregion
+
+//region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+MadContentValues::MadContentValues() {}
+
+MadContentValues::~MadContentValues() {}
+
+//endregion
+
+//region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 const unordered_set<string> &MadContentValues::keySet() const {
     return _keys;
 }
@@ -21,25 +35,25 @@ const vector<string> MadContentValues::keys() const {
     return vector<string>(_keys.begin(), _keys.end());
 }
 
+bool MadContentValues::isEmpty() {
+    return _keys.size() <= 0;
+}
+
 bool MadContentValues::containsKey(string const &key) {
     return _keys.find(key) != _keys.end();
 }
 
-void MadContentValues::putData(string const &key, MadContentValues::Data &data) {
+MadContentValues::DataType MadContentValues::typeForKey(string const &key) {
     if (containsKey(key)) {
-        long i = _dataMap.at(key);
-        _values[i] = data;
-    } else {
-        long i = _values.size();
-        _values.emplace_back(data);
-        _dataMap.emplace(key, i);
+        return getData(key).dataType;
     }
-    _keys.emplace(key);
+    return NONE;
 }
 
-MadContentValues::Data MadContentValues::getData(string const &key) {
-    long i = _dataMap.at(key);
-    return _values[i];
+void MadContentValues::clear() {
+    _keys.clear();
+    _values.clear();
+    _dataMap.clear();
 }
 
 sqlite3_int64 MadContentValues::getAsInteger(string const &key) {
@@ -147,28 +161,33 @@ void MadContentValues::putBlob(string const &key, vector<byte> &value) {
     putData(key, d);
 }
 
-bool MadContentValues::isEmpty() {
-    return _keys.size() <= 0;
-}
-
-MadContentValues::DataType MadContentValues::typeForKey(string const &key) {
-    if (containsKey(key)) {
-        return getData(key).dataType;
-    }
-    return NONE;
-}
-
-void MadContentValues::clear() {
-    _keys.clear();
-    _values.clear();
-    _dataMap.clear();
-}
-
 void MadContentValues::putBlob(string const &key, const void *blob, size_t sz) {
     byte *charBuf = (byte *) blob;
     vector<byte> value(charBuf, charBuf + sz);
     Data d = {value};
     putData(key, d);
+}
+
+//endregion
+
+//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+void MadContentValues::putData(string const &key, MadContentValues::Data &data) {
+    if (containsKey(key)) {
+        long i = _dataMap.at(key);
+        _values[i] = data;
+    } else {
+        long i = _values.size();
+        _values.emplace_back(data);
+        _dataMap.emplace(key, i);
+    }
+    _keys.emplace(key);
+}
+
+MadContentValues::Data MadContentValues::getData(string const &key) {
+    long i = _dataMap.at(key);
+    return _values[i];
 }
 
 double MadContentValues::stringToDouble(string const &str) {
@@ -191,6 +210,4 @@ MadContentValues::numberToString(T number) {
     return ss.str();
 }
 
-
-
-
+//endregion

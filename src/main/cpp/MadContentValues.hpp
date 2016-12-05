@@ -16,6 +16,9 @@
 namespace madsqlite {
 
     class MadContentValues {
+
+//region Inner Classes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     public:
         enum DataType {
             NONE,
@@ -53,20 +56,28 @@ namespace madsqlite {
             };
         };
 
+//endregion
+
+//region Members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    private:
         std::unordered_set<std::string> _keys;
         std::vector<Data> _values;
         std::unordered_map<std::string, long> _dataMap;
 
-        void putData(std::string const &key, Data &data);
+//endregion
 
-        Data getData(std::string const &key);
+//region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        double stringToDouble(std::string const &str);
+    public:
 
-        sqlite3_int64 stringToInt(std::string const &str);
+        MadContentValues();
 
-        template<typename T>
-        std::string numberToString(T number);
+        virtual ~MadContentValues();
+
+//endregion
+
+//region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public:
 
@@ -81,8 +92,6 @@ namespace madsqlite {
         DataType typeForKey(std::string const &key);
 
         void clear();
-
-        //region ACCESSORS
 
         sqlite3_int64 getAsInteger(std::string const &key);
 
@@ -102,7 +111,24 @@ namespace madsqlite {
 
         void putBlob(std::string const &key, const void *blob, size_t sz);
 
-        //endregion
+//endregion
+
+//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    private:
+
+        void putData(std::string const &key, Data &data);
+
+        Data getData(std::string const &key);
+
+        double stringToDouble(std::string const &str);
+
+        sqlite3_int64 stringToInt(std::string const &str);
+
+        template<typename T>
+        std::string numberToString(T number);
+
+//endregion
 
     };
 
