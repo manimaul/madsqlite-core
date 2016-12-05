@@ -66,7 +66,7 @@ namespace madsqlite {
          * Execute a sql query
          *
          * @param sql the query
-         * @return a MadQuery to retrive query results
+         * @return a MadQuery to retrieve query results
          */
         MadQuery query(std::string const &sql);
 
@@ -75,7 +75,7 @@ namespace madsqlite {
          *
          * @param sql the query
          * @param args query arguments
-         * @return a MadQuery to retrive query results
+         * @return a MadQuery to retrieve query results
          */
         MadQuery query(std::string const &sql, std::vector<std::string> const &args);
 

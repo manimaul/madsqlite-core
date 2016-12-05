@@ -20,6 +20,7 @@ MadDatabase::MadDatabase() {
 
 MadDatabase::MadDatabase(string const &dbPath) {
     sqlite3_open(dbPath.c_str(), &db);
+    string abs = getAbsoluteFilePath(dbPath);
 }
 
 MadDatabase::~MadDatabase() {
