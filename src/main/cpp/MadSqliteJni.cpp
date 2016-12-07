@@ -1,9 +1,14 @@
 #include <jni.h>
 #include <string>
-#include "../api/MadDatabase.hpp"
+#include <algorithm>
+#include "MadDatabase.hpp"
 
 using namespace std;
 using namespace madsqlite;
+
+// smart pointer reference counting
+using mad_db_ptr = std::shared_ptr<MadDatabase>;
+static std::vector<mad_db_ptr> dbPtrs = std::vector<mad_db_ptr>();
 
 /*
  * How to find java class,field and method signatures:
@@ -297,11 +302,15 @@ Java_io_madrona_madsqlite_JniBridge_openDatabase(JNIEnv *env,
                                                  jstring absPath) {
     if (absPath) {
         const char *path = env->GetStringUTFChars(absPath, 0);
-        jlong retVal = reinterpret_cast<jlong>(new MadDatabase(path));
+        auto ptr = MadDatabase::openDatabase(path);
+        dbPtrs.push_back(ptr);
+        jlong retVal = reinterpret_cast<jlong>(ptr.get());
         env->ReleaseStringUTFChars(absPath, path);
         return retVal;
     } else {
-        return reinterpret_cast<jlong>(new MadDatabase());
+        auto ptr = MadDatabase::openInMemoryDatabase();
+        dbPtrs.push_back(ptr);
+        return reinterpret_cast<jlong>(ptr.get());
     }
 }
 
@@ -309,8 +318,10 @@ JNIEXPORT void JNICALL
 Java_io_madrona_madsqlite_JniBridge_closeDatabase(JNIEnv,
                                                   jclass,
                                                   jlong nativePtr) {
-    void *db = reinterpret_cast<void *>(nativePtr);
-    delete (db);
+    MadDatabase *db = reinterpret_cast<MadDatabase *>(nativePtr);
+    dbPtrs.erase(std::remove_if(dbPtrs.begin(), dbPtrs.end(), [db](mad_db_ptr i) {
+        return i.get() == db;
+    }), dbPtrs.end());
 }
 
 JNIEXPORT void JNICALL

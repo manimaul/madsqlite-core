@@ -11,6 +11,7 @@
 #include "MadConstants.hpp"
 #include "MadContentValues.hpp"
 #include <string>
+#include <memory>
 #include <unordered_map>
 
 namespace madsqlite {

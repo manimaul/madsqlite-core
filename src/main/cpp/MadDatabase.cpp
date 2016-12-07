@@ -5,6 +5,7 @@
 #include "MadDatabase.hpp"
 #include "MadUtil.hpp"
 #include <iostream>
+#include <mutex>
 
 using namespace madsqlite;
 using namespace std;
