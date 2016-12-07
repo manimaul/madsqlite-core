@@ -16,7 +16,10 @@ static unordered_map<string, weak_ptr<MadDatabase>> databaseSet = unordered_map<
 class MadDatabase::Impl {
 
 public:
+    Impl();
+
     Impl(string const &dbPath);
+
     virtual ~Impl();
 
     // Members
@@ -27,6 +30,20 @@ public:
     // Methods
     int execInternal(std::string const &sql);
 
+    bool insert(std::string const &table, MadContentValues &values);
+
+    MadQuery query(std::string const &sql, std::vector<std::string> const &args);
+
+    int exec(std::string const &sql);
+
+    std::string getError(bool guard);
+
+    void beginTransaction();
+
+    void rollbackTransaction();
+
+    void commitTransaction();
+
 };
 
 //region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,20 +51,19 @@ public:
 
 //region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+MadDatabase::MadDatabase(MadDatabase::Impl *impl) : impl(impl) {}
+
+MadDatabase::Impl::Impl() {
+    sqlite3_open(":memory:", &db);
+}
+
 MadDatabase::Impl::Impl(string const &dbPath) {
     sqlite3_open(dbPath.c_str(), &db);
 }
 
 MadDatabase::Impl::~Impl() {
-    sqlite3_close(db);
-}
-
-MadDatabase::MadDatabase() : internals(new Impl(":memory:")) {}
-
-MadDatabase::MadDatabase(string const &dbPath) : internals(new Impl(dbPath)) {}
-
-MadDatabase::~MadDatabase() {
     lock_guard<mutex> guard(databaseMutex);
+    sqlite3_close(db);
     for (auto itr = databaseSet.begin(); itr != databaseSet.end(); ++itr) {
         if (itr->second.expired()) {
             databaseSet.erase(itr);
@@ -56,24 +72,30 @@ MadDatabase::~MadDatabase() {
 }
 
 std::shared_ptr<MadDatabase> MadDatabase::openInMemoryDatabase() {
-    return make_shared<MadDatabase>();
+    return make_shared<MadDatabase>(new Impl());
 }
 
 std::shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
     lock_guard<mutex> guard(databaseMutex);
-
-    const string absPath = getAbsoluteFilePath(dbPath);
-    auto itr = databaseSet.find(absPath);
-    if (itr != databaseSet.end()) {
-        if (itr->second.expired()) {
-            databaseSet.erase(itr);
-        } else {
-            return itr->second.lock();
+    auto absPath = getAbsoluteFilePath(dbPath);
+    if (absPath.length()) {
+        auto itr = databaseSet.find(absPath);
+        if (itr != databaseSet.end()) {
+            if (itr->second.expired()) {
+                databaseSet.erase(itr);
+            } else {
+                return itr->second.lock();
+            }
         }
     }
 
-    auto ptr = make_shared<MadDatabase>(absPath);
-    databaseSet.emplace(absPath, ptr);
+    auto imp = new Impl(dbPath);
+    auto err = imp->getError(false);
+    auto ptr = make_shared<MadDatabase>(imp);
+    absPath = getAbsoluteFilePath(dbPath);
+    if (absPath.length() && !err.length()) {
+        databaseSet.emplace(getAbsoluteFilePath(dbPath), ptr);
+    }
     return move(ptr);
 }
 
@@ -82,42 +104,64 @@ std::shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
 //region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void MadDatabase::beginTransaction() {
-    if (!internals->isInTransaction) {
-        internals->execInternal("BEGIN");
-        internals->isInTransaction = true;
-    }
+    impl->beginTransaction();
 }
 
 void MadDatabase::rollbackTransaction() {
-    if (internals->isInTransaction) {
-        internals->execInternal("ROLLBACK");
-        internals->isInTransaction = false;
-    }
+    impl->rollbackTransaction();
 }
 
 void MadDatabase::commitTransaction() {
-    if (internals->isInTransaction) {
-        internals->execInternal("COMMIT");
-        internals->isInTransaction = false;
-    }
+    impl->commitTransaction();
 }
 
 int MadDatabase::exec(string const &sql) {
-    string upper = upperCaseString(sql);
-    if (internals->transactionKeyWords.find(upper) != internals->transactionKeyWords.end()) {
-        return 0;
-    }
-    return internals->execInternal(sql);
+    return impl->exec(sql);
 }
 
 string MadDatabase::getError() {
-    lock_guard<mutex> guard(databaseMutex);
-    auto err = string(sqlite3_errmsg(internals->db));
-    if (err.compare("not an error") == 0 || err.compare("unknown error") == 0) {
-        return "";
-    } else {
-        return err;
+    return impl->getError(true);
+}
+
+MadQuery MadDatabase::query(string const &sql, vector<string> const &args) {
+    return impl->query(sql, args);
+}
+
+MadQuery MadDatabase::query(string const &sql) {
+    return impl->query(sql, {});
+}
+
+//endregion
+
+//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void MadDatabase::Impl::beginTransaction() {
+    if (!isInTransaction) {
+        execInternal("BEGIN");
+        isInTransaction = true;
     }
+}
+
+void MadDatabase::Impl::rollbackTransaction() {
+    if (isInTransaction) {
+        execInternal("ROLLBACK");
+        isInTransaction = false;
+    }
+}
+
+void MadDatabase::Impl::commitTransaction() {
+    if (isInTransaction) {
+        execInternal("COMMIT");
+        isInTransaction = false;
+    }
+}
+
+int MadDatabase::Impl::exec(string const &sql) {
+    string upper = upperCaseString(sql);
+    if (transactionKeyWords.find(upper) != transactionKeyWords.end()) {
+        return 0;
+    }
+    return execInternal(sql);
 }
 
 int MadDatabase::Impl::execInternal(std::string const &sql) {
@@ -127,13 +171,21 @@ int MadDatabase::Impl::execInternal(std::string const &sql) {
     if (rc == SQLITE_OK) {
         cout << "exec: " << sql << " " << rc << endl;
     } else {
-        cout << "exec: " << sql << " " << rc << " " << errorMessage << endl;
-        sqlite3_free(errorMessage);
+        if (nullptr != errorMessage) {
+            cout << "exec: " << sql << " " << rc << " " << errorMessage << endl;
+            sqlite3_free(errorMessage);
+        } else {
+            cout << "exec: " << sql << " " << rc << " " << getError(false) << endl;
+        }
     }
     return sqlite3_changes(db);
 }
 
 bool MadDatabase::insert(string const &table, MadContentValues &values) {
+    return impl->insert(table, values);
+}
+
+bool MadDatabase::Impl::insert(string const &table, MadContentValues &values) {
     if (values.isEmpty()) {
         return false;
     }
@@ -159,9 +211,9 @@ bool MadDatabase::insert(string const &table, MadContentValues &values) {
     }
     sql = sql + bindings;
     sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(internals->db, sql.c_str(), -1, &stmt, 0);
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        cout << "Could not prepare statement: " << sqlite3_errmsg(internals->db) << endl;
+        cout << "Could not prepare statement: " << sqlite3_errmsg(db) << endl;
         return false;
     }
 
@@ -214,12 +266,23 @@ bool MadDatabase::insert(string const &table, MadContentValues &values) {
     return true;
 }
 
-MadQuery MadDatabase::query(string const &sql, vector<string> const &args) {
+string MadDatabase::Impl::getError(bool guard) {
+    if (guard)
+        lock_guard<mutex> g(databaseMutex);
+    auto err = string(sqlite3_errmsg(db));
+    if (err.compare("not an error") == 0 || err.compare("unknown error") == 0) {
+        return "";
+    } else {
+        return err;
+    }
+}
+
+MadQuery MadDatabase::Impl::query(string const &sql, vector<string> const &args) {
     lock_guard<mutex> guard(databaseMutex);
     sqlite3_stmt *stmt = nullptr;
-    int rc = sqlite3_prepare_v2(internals->db, sql.c_str(), -1, &stmt, 0);
+    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        cout << "Could not prepare statement: " << sqlite3_errmsg(internals->db) << endl;
+        cout << "Could not prepare statement: " << sqlite3_errmsg(db) << endl;
     }
     for (int i = 0; i < args.size(); ++i) {
         const string &str = args.at((unsigned long) i);
@@ -231,11 +294,4 @@ MadQuery MadDatabase::query(string const &sql, vector<string> const &args) {
     return MadQuery(stmt);
 }
 
-MadQuery MadDatabase::query(string const &sql) {
-    return query(sql, {});
-}
-
-//endregion
-
-//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //endregion

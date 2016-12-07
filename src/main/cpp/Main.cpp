@@ -31,10 +31,8 @@ static void print(string const &msg, vector<byte> &blob) {
     cout << endl;
 }
 
-int main() {
-    // Create an in-memory database
-    auto db = MadDatabase::openDatabase("/Users/williamkamp/Desktop/temp.s3db");
-//    auto db = MadDatabase::openInMemoryDatabase();
+void db() {
+    auto db = MadDatabase::openDatabase("/Users/williamkamp/Desktop/tempzzz.s3db");
     db->exec("CREATE TABLE test(x INTEGER, "
                     "y TEXT, "
                     "z BLOB);");
@@ -65,4 +63,9 @@ int main() {
         print("z:", storedBlob);
         cursor.moveToNext();
     }
+}
+
+int main() {
+    db();
+    return 0;
 }

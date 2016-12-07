@@ -18,6 +18,14 @@ namespace madsqlite {
 
 class MadDatabase {
 
+//region Inner Classes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+private:
+    class Impl;
+    std::unique_ptr<Impl> impl;
+
+//endregion
+
 //region Members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //endregion
 
@@ -36,9 +44,10 @@ public:
      */
     static std::shared_ptr<MadDatabase> openInMemoryDatabase();
 
-    MadDatabase();
-    MadDatabase(std::string const &dbPath);
-    virtual ~MadDatabase();
+    /**
+     * For internal implementation.
+     */
+    MadDatabase(Impl *impl);
 
 //endregion
 
@@ -94,15 +103,6 @@ public:
 //endregion
 
 //region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//endregion
-
-
-//region Inner Classes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-private:
-    class Impl;
-    std::unique_ptr<Impl> internals;
-
 //endregion
 
 };
