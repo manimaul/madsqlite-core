@@ -12,3 +12,4 @@ CMakeScripts
 Makefile
 cmake_install.cmake
 CTestTestfile.cmake
+madsqlite-lib

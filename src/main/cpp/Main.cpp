@@ -33,8 +33,9 @@ static void print(string const &msg, vector<byte> &blob) {
 
 int main() {
     // Create an in-memory database
-    auto db = MadDatabase();
-    db.exec("CREATE TABLE test(x INTEGER, "
+    auto db = MadDatabase::openDatabase("/Users/williamkamp/Desktop/temp.s3db");
+//    auto db = MadDatabase::openInMemoryDatabase();
+    db->exec("CREATE TABLE test(x INTEGER, "
                     "y TEXT, "
                     "z BLOB);");
 
@@ -44,16 +45,16 @@ int main() {
     cv.putBlob("z", blob, strlen(blob));
     cv.putInteger("y", 7070);
     cv.putInteger("x", 1970);
-    db.insert("test", cv);
+    db->insert("test", cv);
 
     cv.clear();
-    db.insert("test", cv);
+    db->insert("test", cv);
 
     cv.clear();
     cv.putInteger("y", 61);
-    db.insert("test", cv);
+    db->insert("test", cv);
 
-    auto cursor = db.query("SELECT * FROM test");
+    auto cursor = db->query("SELECT * FROM test");
     cursor.moveToFirst();
     while (!cursor.isAfterLast()) {
         sqlite3_int64 storedX = cursor.getInt(0);

@@ -3,6 +3,8 @@
 //
 
 #include <string>
+#include <limits.h>
+#include <stdlib.h>
 
 namespace madsqlite {
 
@@ -34,8 +36,9 @@ namespace madsqlite {
             absolute_path = absolute;
 #elif defined(__linux__) || defined(__sun) || defined(__hpux) || defined(__GNUC__)
         char *absolute = realpath(filePath.c_str(), nullptr);
-        if (absolute)
+        if (absolute) {
             absolutePath = absolute;
+        }
         free(absolute);
 #else
 #error Platform absolute path function needed

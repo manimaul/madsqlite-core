@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <string>
-#include "MadDatabase.hpp"
+#include "../api/MadDatabase.hpp"
 
 using namespace std;
 using namespace madsqlite;

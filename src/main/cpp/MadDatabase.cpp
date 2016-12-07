@@ -2,29 +2,79 @@
 // Created by William Kamp on 10/9/16.
 //
 
-#include <iostream>
 #include "MadDatabase.hpp"
 #include "MadUtil.hpp"
+#include <iostream>
 
 using namespace madsqlite;
 using namespace std;
+
+static mutex databaseMutex;
+static unordered_map<string, weak_ptr<MadDatabase>> databaseSet = unordered_map<string, weak_ptr<MadDatabase>>();
+
+
+class MadDatabase::Impl {
+
+public:
+    Impl(string const &dbPath);
+    virtual ~Impl();
+
+    // Members
+    sqlite3 *db;
+    bool isInTransaction = false;
+    const std::unordered_set<std::string> transactionKeyWords = {"BEGIN", "COMMIT", "ROLLBACK"};
+
+    // Methods
+    int execInternal(std::string const &sql);
+
+};
 
 //region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //endregion
 
 //region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MadDatabase::MadDatabase() {
-    sqlite3_open(":memory:", &db);
+MadDatabase::Impl::Impl(string const &dbPath) {
+    sqlite3_open(dbPath.c_str(), &db);
 }
 
-MadDatabase::MadDatabase(string const &dbPath) {
-    sqlite3_open(dbPath.c_str(), &db);
-    string abs = getAbsoluteFilePath(dbPath);
+MadDatabase::Impl::~Impl() {
+    sqlite3_close(db);
 }
+
+MadDatabase::MadDatabase() : internals(new Impl(":memory:")) {}
+
+MadDatabase::MadDatabase(string const &dbPath) : internals(new Impl(dbPath)) {}
 
 MadDatabase::~MadDatabase() {
-    sqlite3_close(db);
+    lock_guard<mutex> guard(databaseMutex);
+    for (auto itr = databaseSet.begin(); itr != databaseSet.end(); ++itr) {
+        if (itr->second.expired()) {
+            databaseSet.erase(itr);
+        }
+    }
+}
+
+std::shared_ptr<MadDatabase> MadDatabase::openInMemoryDatabase() {
+    return make_shared<MadDatabase>();
+}
+
+std::shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
+    lock_guard<mutex> guard(databaseMutex);
+
+    const string absPath = getAbsoluteFilePath(dbPath);
+    auto itr = databaseSet.find(absPath);
+    if (itr != databaseSet.end()) {
+        if (itr->second.expired()) {
+            databaseSet.erase(itr);
+        } else {
+            return itr->second.lock();
+        }
+    }
+
+    auto ptr = make_shared<MadDatabase>(absPath);
+    databaseSet.emplace(absPath, ptr);
+    return move(ptr);
 }
 
 //endregion
@@ -32,36 +82,37 @@ MadDatabase::~MadDatabase() {
 //region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void MadDatabase::beginTransaction() {
-    if (!isInTransaction) {
-        execInternal("BEGIN");
-        isInTransaction = true;
+    if (!internals->isInTransaction) {
+        internals->execInternal("BEGIN");
+        internals->isInTransaction = true;
     }
 }
 
 void MadDatabase::rollbackTransaction() {
-    if (isInTransaction) {
-        execInternal("ROLLBACK");
-        isInTransaction = false;
+    if (internals->isInTransaction) {
+        internals->execInternal("ROLLBACK");
+        internals->isInTransaction = false;
     }
 }
 
 void MadDatabase::commitTransaction() {
-    if (isInTransaction) {
-        execInternal("COMMIT");
-        isInTransaction = false;
+    if (internals->isInTransaction) {
+        internals->execInternal("COMMIT");
+        internals->isInTransaction = false;
     }
 }
 
 int MadDatabase::exec(string const &sql) {
     string upper = upperCaseString(sql);
-    if (transactionKeyWords.find(upper) != transactionKeyWords.end()) {
+    if (internals->transactionKeyWords.find(upper) != internals->transactionKeyWords.end()) {
         return 0;
     }
-    return execInternal(sql);
+    return internals->execInternal(sql);
 }
 
 string MadDatabase::getError() {
-    auto err = string(sqlite3_errmsg(db));
+    lock_guard<mutex> guard(databaseMutex);
+    auto err = string(sqlite3_errmsg(internals->db));
     if (err.compare("not an error") == 0 || err.compare("unknown error") == 0) {
         return "";
     } else {
@@ -69,7 +120,8 @@ string MadDatabase::getError() {
     }
 }
 
-int MadDatabase::execInternal(string const &sql) {
+int MadDatabase::Impl::execInternal(std::string const &sql) {
+    lock_guard<mutex> guard(databaseMutex);
     char *errorMessage = 0;
     int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errorMessage);
     if (rc == SQLITE_OK) {
@@ -85,6 +137,8 @@ bool MadDatabase::insert(string const &table, MadContentValues &values) {
     if (values.isEmpty()) {
         return false;
     }
+
+    lock_guard<mutex> guard(databaseMutex);
     /*
      * INSERT INTO [table] ([row1], [row2]) VALUES (0,"value");
      * INSERT INTO [table] ([?], [?]) VALUES (?,?);
@@ -105,9 +159,9 @@ bool MadDatabase::insert(string const &table, MadContentValues &values) {
     }
     sql = sql + bindings;
     sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
+    int rc = sqlite3_prepare_v2(internals->db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        cout << "Could not prepare statement: " << sqlite3_errmsg(db) << endl;
+        cout << "Could not prepare statement: " << sqlite3_errmsg(internals->db) << endl;
         return false;
     }
 
@@ -161,10 +215,11 @@ bool MadDatabase::insert(string const &table, MadContentValues &values) {
 }
 
 MadQuery MadDatabase::query(string const &sql, vector<string> const &args) {
+    lock_guard<mutex> guard(databaseMutex);
     sqlite3_stmt *stmt = nullptr;
-    int rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
+    int rc = sqlite3_prepare_v2(internals->db, sql.c_str(), -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        cout << "Could not prepare statement: " << sqlite3_errmsg(db) << endl;
+        cout << "Could not prepare statement: " << sqlite3_errmsg(internals->db) << endl;
     }
     for (int i = 0; i < args.size(); ++i) {
         const string &str = args.at((unsigned long) i);

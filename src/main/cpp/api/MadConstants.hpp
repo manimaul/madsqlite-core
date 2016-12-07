@@ -5,9 +5,6 @@
 #ifndef PROJECT_CONSTANTS_H
 #define PROJECT_CONSTANTS_H
 
-#include <string>
-#include <vector>
-
 namespace madsqlite {
     using byte = unsigned char;
 }

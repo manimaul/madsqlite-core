@@ -5,6 +5,8 @@
 #ifndef PROJECT_CURSOR_H
 #define PROJECT_CURSOR_H
 
+#include <string>
+#include <vector>
 #include "MadConstants.hpp"
 #include "sqlite3.h"
 
