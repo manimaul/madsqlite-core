@@ -41,7 +41,7 @@ TEST(MadDatabaseTests, InsertInteger) {
     EXPECT_EQ(INT_MAX, secondResult);
 }
 
-TEST(MadDatabseTests, InsertLong) {
+TEST(MadDatabaseTests, InsertLong) {
     auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(keyInt INTEGER);");
     EXPECT_EQ("", db->getError());
@@ -73,7 +73,7 @@ TEST(MadDatabseTests, InsertLong) {
     EXPECT_EQ(LONG_MAX, secondResult);
 }
 
-TEST(MadDatabseTests, InsertFloat) {
+TEST(MadDatabaseTests, InsertFloat) {
     auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(keyReal REAL);");
     EXPECT_EQ("", db->getError());
@@ -105,7 +105,7 @@ TEST(MadDatabseTests, InsertFloat) {
     EXPECT_EQ(FLT_MAX, secondResult);
 }
 
-TEST(MadDatabseTests, InsertDouble) {
+TEST(MadDatabaseTests, InsertDouble) {
     auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(keyReal REAL);");
     EXPECT_EQ("", db->getError());
@@ -137,7 +137,7 @@ TEST(MadDatabseTests, InsertDouble) {
     EXPECT_EQ(DBL_MAX, secondResult);
 }
 
-TEST(MadDatabseTests, InsertBlob) {
+TEST(MadDatabaseTests, InsertBlob) {
     auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(keyBlob BLOB);");
     EXPECT_EQ("", db->getError());
@@ -161,7 +161,7 @@ TEST(MadDatabseTests, InsertBlob) {
     EXPECT_EQ("data", dataStr);
 }
 
-TEST(MadDatabseTests, InsertText) {
+TEST(MadDatabaseTests, InsertText) {
     auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(keyText TEXT);");
     EXPECT_EQ("", db->getError());
@@ -180,4 +180,92 @@ TEST(MadDatabseTests, InsertText) {
     EXPECT_TRUE(query.isAfterLast());
 
     EXPECT_EQ("data", dataStr);
+}
+
+TEST(MadDatabaseTests, QueryArgs) {
+    auto db = MadDatabase::openInMemoryDatabase();
+    db->exec("CREATE TABLE test(keyInt INTEGER, keyText TEXT);");
+    EXPECT_EQ("", db->getError());
+
+    auto cv = MadContentValues();
+    cv.putString("keyText", "the quick brown fox");
+    cv.putInteger("keyInt", 99);
+    EXPECT_TRUE(db->insert("test", cv));
+    EXPECT_EQ("", db->getError());
+
+    cv.clear();
+    cv.putString("keyText", "the slow white tortoise");
+    cv.putInteger("keyInt", 34);
+    EXPECT_TRUE(db->insert("test", cv));
+
+    long number;
+    string value;
+    {
+        auto query = db->query("SELECT keyText,keyInt FROM test WHERE keyInt is ?;", {"99"});
+        EXPECT_EQ("", db->getError());
+        EXPECT_TRUE(query.moveToFirst());
+        EXPECT_FALSE(query.isAfterLast());
+        value = query.getString(0);
+        number = query.getInt(1);
+        EXPECT_TRUE(query.moveToNext());
+        EXPECT_TRUE(query.isAfterLast());
+    }
+
+    EXPECT_EQ(99, number);
+    EXPECT_EQ("the quick brown fox", value);
+
+    {
+        auto query = db->query("SELECT keyText,keyInt FROM test WHERE keyInt is ?;", {"34"});
+        EXPECT_EQ("", db->getError());
+        EXPECT_TRUE(query.moveToFirst());
+        EXPECT_FALSE(query.isAfterLast());
+        value = query.getString(0);
+        number = query.getInt(1);
+        EXPECT_TRUE(query.moveToNext());
+        EXPECT_TRUE(query.isAfterLast());
+    }
+
+    EXPECT_EQ(34, number);
+    EXPECT_EQ("the slow white tortoise", value);
+}
+
+TEST(MadDatabaseTests, MultiIndexCursor) {
+    auto db = MadDatabase::openInMemoryDatabase();
+        db->exec("CREATE TABLE test(keyInt INTEGER, keyReal REAL, keyText TEXT);");
+
+        auto cv = MadContentValues();
+        cv.putString("keyText", "the quick brown fox");
+        cv.putInteger("keyInt", 99);
+        cv.putReal("keyReal", M_PI);
+
+        EXPECT_TRUE(db->insert("test", cv));
+        EXPECT_EQ("", db->getError());
+
+        cv.clear();
+        cv.putString("keyText", "the slow red tortoise");
+        cv.putInteger("keyInt", 42);
+        cv.putReal("keyReal", M_E);
+
+        EXPECT_TRUE(db->insert("test", cv));
+        EXPECT_EQ("", db->getError());
+
+        auto query = db->query("SELECT * FROM test;");
+        EXPECT_EQ("", db->getError());
+
+        EXPECT_TRUE(query.moveToFirst());
+        EXPECT_EQ(M_PI, query.getReal(1));
+        EXPECT_EQ("the quick brown fox", query.getString(2));
+        EXPECT_EQ(99, query.getReal(0));
+        EXPECT_FALSE(query.isAfterLast());
+
+        EXPECT_TRUE(query.moveToNext());
+        EXPECT_FALSE(query.isAfterLast());
+        EXPECT_EQ(M_E, query.getReal(1));
+        EXPECT_EQ("the slow red tortoise", query.getString(2));
+        EXPECT_EQ(42, query.getReal(0));
+        EXPECT_FALSE(query.isAfterLast());
+
+        EXPECT_TRUE(query.moveToNext());
+        EXPECT_FALSE(query.moveToNext());
+        EXPECT_TRUE(query.isAfterLast());
 }
