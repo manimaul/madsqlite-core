@@ -1,0 +1,159 @@
+\hypertarget{classmadsqlite_1_1_mad_database}{}\section{madsqlite\+:\+:Mad\+Database Class Reference}
+\label{classmadsqlite_1_1_mad_database}\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmadsqlite_1_1_mad_database_adeaa573aff2327d76018be2db2ecf638}{Mad\+Database} (Impl $\ast$impl)
+\item 
+bool \hyperlink{classmadsqlite_1_1_mad_database_a9383a29a4411d29a5345cd233e32756d}{insert} (std\+::string const \&table, \hyperlink{classmadsqlite_1_1_mad_content_values}{Mad\+Content\+Values} \&values)
+\item 
+\hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \hyperlink{classmadsqlite_1_1_mad_database_a6fb119ea383a9d93b7d3a5ddce7bc756}{query} (std\+::string const \&sql)
+\item 
+\hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \hyperlink{classmadsqlite_1_1_mad_database_a6514212d65ca428fb35ee87b9d3c78af}{query} (std\+::string const \&sql, std\+::vector$<$ std\+::string $>$ const \&args)
+\item 
+int \hyperlink{classmadsqlite_1_1_mad_database_adba4c69666317dcdf14cd3a1eb6260dd}{exec} (std\+::string const \&sql)
+\item 
+std\+::string \hyperlink{classmadsqlite_1_1_mad_database_ad70e43249370cd4a04183f3f98751b4e}{get\+Error} ()
+\item 
+void \hyperlink{classmadsqlite_1_1_mad_database_a985f7430489959d345b01ffc191a70d5}{begin\+Transaction} ()
+\item 
+void \hyperlink{classmadsqlite_1_1_mad_database_a3ebfd4349bde98e99dace3875c964861}{rollback\+Transaction} ()
+\item 
+void \hyperlink{classmadsqlite_1_1_mad_database_a438b3c7393a84de57b638db06d84bd7b}{commit\+Transaction} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database} $>$ \hyperlink{classmadsqlite_1_1_mad_database_a68c5b61e4cf000f4947f9c43a2c12338}{open\+Database} (std\+::string const \&db\+Path)
+\item 
+static std\+::shared\+\_\+ptr$<$ \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database} $>$ \hyperlink{classmadsqlite_1_1_mad_database_ac38e0559a2d724541d8ac7102db4fcd1}{open\+In\+Memory\+Database} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classmadsqlite_1_1_mad_database_adeaa573aff2327d76018be2db2ecf638}{}\label{classmadsqlite_1_1_mad_database_adeaa573aff2327d76018be2db2ecf638} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!Mad\+Database@{Mad\+Database}}
+\index{Mad\+Database@{Mad\+Database}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{Mad\+Database()}{MadDatabase()}}
+{\footnotesize\ttfamily madsqlite\+::\+Mad\+Database\+::\+Mad\+Database (\begin{DoxyParamCaption}\item[{Impl $\ast$}]{impl }\end{DoxyParamCaption})}
+
+For internal use. see \+::open\+In\+Memory\+Database and \+::open\+Database 
+
+\subsection{Member Function Documentation}
+\hypertarget{classmadsqlite_1_1_mad_database_a985f7430489959d345b01ffc191a70d5}{}\label{classmadsqlite_1_1_mad_database_a985f7430489959d345b01ffc191a70d5} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!begin\+Transaction@{begin\+Transaction}}
+\index{begin\+Transaction@{begin\+Transaction}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{begin\+Transaction()}{beginTransaction()}}
+{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Database\+::begin\+Transaction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Begins a transaction. The changes will be rolled back if any transaction performed without being commited. \hypertarget{classmadsqlite_1_1_mad_database_a438b3c7393a84de57b638db06d84bd7b}{}\label{classmadsqlite_1_1_mad_database_a438b3c7393a84de57b638db06d84bd7b} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!commit\+Transaction@{commit\+Transaction}}
+\index{commit\+Transaction@{commit\+Transaction}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{commit\+Transaction()}{commitTransaction()}}
+{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Database\+::commit\+Transaction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Commits a previously begun transaction. \hypertarget{classmadsqlite_1_1_mad_database_adba4c69666317dcdf14cd3a1eb6260dd}{}\label{classmadsqlite_1_1_mad_database_adba4c69666317dcdf14cd3a1eb6260dd} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!exec@{exec}}
+\index{exec@{exec}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{exec()}{exec()}}
+{\footnotesize\ttfamily int madsqlite\+::\+Mad\+Database\+::exec (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{sql }\end{DoxyParamCaption})}
+
+Execute a sql statement.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & a statement to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the number of rows modified by those S\+QL statements (I\+N\+S\+E\+RT, U\+P\+D\+A\+TE or D\+E\+L\+E\+TE only) 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_database_ad70e43249370cd4a04183f3f98751b4e}{}\label{classmadsqlite_1_1_mad_database_ad70e43249370cd4a04183f3f98751b4e} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!get\+Error@{get\+Error}}
+\index{get\+Error@{get\+Error}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{get\+Error()}{getError()}}
+{\footnotesize\ttfamily std\+::string madsqlite\+::\+Mad\+Database\+::get\+Error (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+the most recent database A\+PI call error message. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_database_a9383a29a4411d29a5345cd233e32756d}{}\label{classmadsqlite_1_1_mad_database_a9383a29a4411d29a5345cd233e32756d} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!insert@{insert}}
+\index{insert@{insert}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily bool madsqlite\+::\+Mad\+Database\+::insert (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{table,  }\item[{\hyperlink{classmadsqlite_1_1_mad_content_values}{Mad\+Content\+Values} \&}]{values }\end{DoxyParamCaption})}
+
+Insert values into a table
+
+
+\begin{DoxyParams}{Parameters}
+{\em table} & the table to insert into \\
+\hline
+{\em values} & the values to insert \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if the insertion was successful 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_database_a68c5b61e4cf000f4947f9c43a2c12338}{}\label{classmadsqlite_1_1_mad_database_a68c5b61e4cf000f4947f9c43a2c12338} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!open\+Database@{open\+Database}}
+\index{open\+Database@{open\+Database}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{open\+Database()}{openDatabase()}}
+{\footnotesize\ttfamily static std\+::shared\+\_\+ptr$<$\hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database}$>$ madsqlite\+::\+Mad\+Database\+::open\+Database (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{db\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Opens a database. 
+\begin{DoxyParams}{Parameters}
+{\em db\+Path} & the absolute path of the database to open / create. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classmadsqlite_1_1_mad_database_ac38e0559a2d724541d8ac7102db4fcd1}{}\label{classmadsqlite_1_1_mad_database_ac38e0559a2d724541d8ac7102db4fcd1} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!open\+In\+Memory\+Database@{open\+In\+Memory\+Database}}
+\index{open\+In\+Memory\+Database@{open\+In\+Memory\+Database}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{open\+In\+Memory\+Database()}{openInMemoryDatabase()}}
+{\footnotesize\ttfamily static std\+::shared\+\_\+ptr$<$\hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database}$>$ madsqlite\+::\+Mad\+Database\+::open\+In\+Memory\+Database (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Opens an in memory database an in memory database. \hypertarget{classmadsqlite_1_1_mad_database_a6fb119ea383a9d93b7d3a5ddce7bc756}{}\label{classmadsqlite_1_1_mad_database_a6fb119ea383a9d93b7d3a5ddce7bc756} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!query@{query}}
+\index{query@{query}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{query()}{query()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} madsqlite\+::\+Mad\+Database\+::query (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{sql }\end{DoxyParamCaption})}
+
+Execute a sql query
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & the query \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a \hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} to retrieve query results 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_database_a6514212d65ca428fb35ee87b9d3c78af}{}\label{classmadsqlite_1_1_mad_database_a6514212d65ca428fb35ee87b9d3c78af} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!query@{query}}
+\index{query@{query}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{query()}{query()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} madsqlite\+::\+Mad\+Database\+::query (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{sql,  }\item[{std\+::vector$<$ std\+::string $>$ const \&}]{args }\end{DoxyParamCaption})}
+
+Execute a sql query
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & the query \\
+\hline
+{\em args} & query arguments \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a \hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} to retrieve query results 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_database_a3ebfd4349bde98e99dace3875c964861}{}\label{classmadsqlite_1_1_mad_database_a3ebfd4349bde98e99dace3875c964861} 
+\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!rollback\+Transaction@{rollback\+Transaction}}
+\index{rollback\+Transaction@{rollback\+Transaction}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+\subsubsection{\texorpdfstring{rollback\+Transaction()}{rollbackTransaction()}}
+{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Database\+::rollback\+Transaction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Rolls back a begun transaction. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/cpp/api/Mad\+Database.\+hpp\end{DoxyCompactItemize}

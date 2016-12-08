@@ -1,0 +1,110 @@
+\hypertarget{classmadsqlite_1_1_mad_query}{}\section{madsqlite\+:\+:Mad\+Query Class Reference}
+\label{classmadsqlite_1_1_mad_query}\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classmadsqlite_1_1_mad_query_a37a601031ecedf20e53b8c0f610f74b0}{move\+To\+First} ()
+\item 
+bool \hyperlink{classmadsqlite_1_1_mad_query_a2eecba50378a4577803aff41671829fe}{move\+To\+Next} ()
+\item 
+bool \hyperlink{classmadsqlite_1_1_mad_query_a0fa757aa8333e3fc53c57442bdf4cad7}{is\+After\+Last} ()
+\item 
+const std\+::string \hyperlink{classmadsqlite_1_1_mad_query_a63b55fe68d013c3d1fdade2391233cb9}{get\+String} (int column\+Index) const
+\item 
+const std\+::vector$<$ byte $>$ \hyperlink{classmadsqlite_1_1_mad_query_ade5b4bc30c7876eeeb62e2f0bb8fc111}{get\+Blob} (int column\+Index) const
+\item 
+long long int \hyperlink{classmadsqlite_1_1_mad_query_ab04d59c89fccfd773f77276219f4d376}{get\+Int} (int column\+Index)
+\item 
+double \hyperlink{classmadsqlite_1_1_mad_query_ab1d5375285453976e078f320c73e224f}{get\+Real} (int column\+Index)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classmadsqlite_1_1_mad_query_ade5b4bc30c7876eeeb62e2f0bb8fc111}{}\label{classmadsqlite_1_1_mad_query_ade5b4bc30c7876eeeb62e2f0bb8fc111} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!get\+Blob@{get\+Blob}}
+\index{get\+Blob@{get\+Blob}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{get\+Blob()}{getBlob()}}
+{\footnotesize\ttfamily const std\+::vector$<$byte$>$ madsqlite\+::\+Mad\+Query\+::get\+Blob (\begin{DoxyParamCaption}\item[{int}]{column\+Index }\end{DoxyParamCaption}) const}
+
+
+\begin{DoxyParams}{Parameters}
+{\em column\+Index} & the zero-\/based index of the target column. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of that column as data. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_query_ab04d59c89fccfd773f77276219f4d376}{}\label{classmadsqlite_1_1_mad_query_ab04d59c89fccfd773f77276219f4d376} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!get\+Int@{get\+Int}}
+\index{get\+Int@{get\+Int}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{get\+Int()}{getInt()}}
+{\footnotesize\ttfamily long long int madsqlite\+::\+Mad\+Query\+::get\+Int (\begin{DoxyParamCaption}\item[{int}]{column\+Index }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em column\+Index} & the zero-\/based index of the target column. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of that column a long long integer. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_query_ab1d5375285453976e078f320c73e224f}{}\label{classmadsqlite_1_1_mad_query_ab1d5375285453976e078f320c73e224f} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!get\+Real@{get\+Real}}
+\index{get\+Real@{get\+Real}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{get\+Real()}{getReal()}}
+{\footnotesize\ttfamily double madsqlite\+::\+Mad\+Query\+::get\+Real (\begin{DoxyParamCaption}\item[{int}]{column\+Index }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em column\+Index} & the zero-\/based index of the target column. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of that column as a double. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_query_a63b55fe68d013c3d1fdade2391233cb9}{}\label{classmadsqlite_1_1_mad_query_a63b55fe68d013c3d1fdade2391233cb9} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!get\+String@{get\+String}}
+\index{get\+String@{get\+String}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{get\+String()}{getString()}}
+{\footnotesize\ttfamily const std\+::string madsqlite\+::\+Mad\+Query\+::get\+String (\begin{DoxyParamCaption}\item[{int}]{column\+Index }\end{DoxyParamCaption}) const}
+
+
+\begin{DoxyParams}{Parameters}
+{\em column\+Index} & the zero-\/based index of the target column. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of that column as a String. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_query_a0fa757aa8333e3fc53c57442bdf4cad7}{}\label{classmadsqlite_1_1_mad_query_a0fa757aa8333e3fc53c57442bdf4cad7} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!is\+After\+Last@{is\+After\+Last}}
+\index{is\+After\+Last@{is\+After\+Last}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{is\+After\+Last()}{isAfterLast()}}
+{\footnotesize\ttfamily bool madsqlite\+::\+Mad\+Query\+::is\+After\+Last (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+Returns whether the query is pointing to the position after the last row. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_query_a37a601031ecedf20e53b8c0f610f74b0}{}\label{classmadsqlite_1_1_mad_query_a37a601031ecedf20e53b8c0f610f74b0} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!move\+To\+First@{move\+To\+First}}
+\index{move\+To\+First@{move\+To\+First}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{move\+To\+First()}{moveToFirst()}}
+{\footnotesize\ttfamily bool madsqlite\+::\+Mad\+Query\+::move\+To\+First (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Move the query to the first row. \begin{DoxyReturn}{Returns}
+false if the query is empty. 
+\end{DoxyReturn}
+\hypertarget{classmadsqlite_1_1_mad_query_a2eecba50378a4577803aff41671829fe}{}\label{classmadsqlite_1_1_mad_query_a2eecba50378a4577803aff41671829fe} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!move\+To\+Next@{move\+To\+Next}}
+\index{move\+To\+Next@{move\+To\+Next}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{move\+To\+Next()}{moveToNext()}}
+{\footnotesize\ttfamily bool madsqlite\+::\+Mad\+Query\+::move\+To\+Next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Move the query to the next row. \begin{DoxyReturn}{Returns}
+false if the query is already past the last entry in the result set. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/cpp/api/Mad\+Query.\+hpp\end{DoxyCompactItemize}

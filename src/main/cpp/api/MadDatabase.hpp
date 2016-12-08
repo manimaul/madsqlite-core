@@ -23,6 +23,7 @@ class MadDatabase {
 
 private:
     class Impl;
+
     std::unique_ptr<Impl> impl;
 
 //endregion
@@ -96,10 +97,19 @@ public:
      */
     std::string getError();
 
+    /**
+     * Begins a transaction. The changes will be rolled back if any transaction performed without being commited.
+     */
     void beginTransaction();
 
+    /**
+     * Rolls back a begun transaction.
+     */
     void rollbackTransaction();
 
+    /**
+     * Commits a previously begun transaction.
+     */
     void commitTransaction();
 
 //endregion

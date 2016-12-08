@@ -74,7 +74,7 @@ public:
      * @param columnIndex the zero-based index of the target column.
      * @return the value of that column a long long integer.
      */
-    sqlite3_int64 getInt(int columnIndex);
+    long long int getInt(int columnIndex);
 
     /**
      * @param columnIndex the zero-based index of the target column.

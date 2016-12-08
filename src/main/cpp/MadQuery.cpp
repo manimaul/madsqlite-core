@@ -14,8 +14,7 @@ using namespace std;
 
 //region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MadQuery::MadQuery(sqlite3_stmt *statement) : statement(statement) {
-}
+MadQuery::MadQuery(sqlite3_stmt *statement) : statement(statement) {}
 
 MadQuery::MadQuery(MadQuery &&query) {
     statement = query.statement;
@@ -76,8 +75,8 @@ const vector<byte> MadQuery::getBlob(int columnIndex) const {
     return value;
 }
 
-sqlite3_int64 MadQuery::getInt(int columnIndex) {
-    return (sqlite3_int64) sqlite3_column_int64(statement, columnIndex);
+long long int MadQuery::getInt(int columnIndex) {
+    return (long long int) sqlite3_column_int64(statement, columnIndex);
 }
 
 double MadQuery::getReal(int columnIndex) {
