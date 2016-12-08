@@ -10,6 +10,8 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Makefile
-cmake_install.cmake
-CTestTestfile.cmake
-madsqlite-lib
+*.cmake
+libmadsqlite.a
+madsqlite-run
+*.dylib
+runUnitTests

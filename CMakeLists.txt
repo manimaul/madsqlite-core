@@ -15,7 +15,6 @@ set(SOURCE_FILES
         ${SRC_MAIN_DIR}/MadDatabase.cpp
         ${SRC_MAIN_DIR}/MadQuery.cpp
         ${SRC_MAIN_DIR}/MadUtil.hpp
-        ${SRC_MAIN_DIR}/Main.cpp
         ${SRC_MAIN_DIR}/sqlite-amalgamation/sqlite3.c)
 
 add_definitions(-DSQLITE_ENABLE_RTREE)
@@ -29,16 +28,15 @@ if (ANDROID)
             ${SOURCE_FILES})
 else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-    set(SOURCE_FILES
-            ${SRC_MAIN_DIR}/Main.cpp
-            ${SOURCE_FILES})
 endif ()
 
-if (ANDROID)
+if(ANDROID)
     add_library(madsqlite-lib SHARED ${SOURCE_FILES})
     find_library(log-lib log)
     target_link_libraries(madsqlite-lib ${log-lib})
 else ()
-    add_executable(madsqlite-lib ${SOURCE_FILES})
-    target_link_libraries(madsqlite-lib)
+    add_library(madsqlite STATIC ${SOURCE_FILES})
+    add_executable(madsqlite-run ${SRC_MAIN_DIR}/Main.cpp)
+    add_subdirectory(${SRC_MAIN_DIR}/tests)
+    target_link_libraries(madsqlite-run madsqlite)
 endif ()
