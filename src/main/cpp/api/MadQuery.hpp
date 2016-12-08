@@ -41,18 +41,45 @@ public:
 
 public:
 
+    /**
+     * Move the query to the first row.
+     * @return false if the query is empty.
+     */
     bool moveToFirst();
 
+    /**
+     * Move the query to the next row.
+     * @return false if the query is already past the last entry in the result set.
+     */
     bool moveToNext();
 
+    /**
+     * @return Returns whether the query is pointing to the position after the last row.
+     */
     bool isAfterLast();
 
+    /**
+     * @param columnIndex the zero-based index of the target column.
+     * @return the value of that column as a String.
+     */
     const std::string getString(int columnIndex) const;
 
+    /**
+     * @param columnIndex the zero-based index of the target column.
+     * @return the value of that column as data.
+     */
     const std::vector<byte> getBlob(int columnIndex) const;
 
+    /**
+     * @param columnIndex the zero-based index of the target column.
+     * @return the value of that column a long long integer.
+     */
     sqlite3_int64 getInt(int columnIndex);
 
+    /**
+     * @param columnIndex the zero-based index of the target column.
+     * @return the value of that column as a double.
+     */
     double getReal(int columnIndex);
 
 //endregion

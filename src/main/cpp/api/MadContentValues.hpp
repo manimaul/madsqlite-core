@@ -15,122 +15,150 @@
 
 namespace madsqlite {
 
-    class MadContentValues {
+class MadContentValues {
 
 //region Structures ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public:
-        enum DataType {
-            NONE,
-            INT,
-            REAL,
-            TEXT,
-            BLOB,
+public:
+    enum DataType {
+        NONE,
+        INT,
+        REAL,
+        TEXT,
+        BLOB,
+    };
+
+private:
+
+    struct Data {
+        DataType dataType;
+        std::vector<madsqlite::byte> dataBlob;
+        double dataReal;
+        sqlite3_int64 dataInt;
+        std::string dataText;
+
+        Data() {
         };
 
-    private:
-
-        struct Data {
-            DataType dataType;
-            std::vector<madsqlite::byte> dataBlob;
-            double dataReal;
-            sqlite3_int64 dataInt;
-            std::string dataText;
-
-            Data() {};
-
-            Data(const std::vector<madsqlite::byte> &dataBlob) : dataBlob(dataBlob) {
-                dataType = BLOB;
-            };
-
-            Data(const double dataReal) : dataReal(dataReal) {
-                dataType = REAL;
-            };
-
-            Data(const sqlite3_int64 dataInt) : dataInt(dataInt) {
-                dataType = INT;
-            };
-
-            Data(const std::string &dataText) : dataText(dataText) {
-                dataType = TEXT;
-            };
+        Data(const std::vector<madsqlite::byte> &dataBlob) : dataBlob(dataBlob) {
+            dataType = BLOB;
         };
+
+        Data(const double dataReal) : dataReal(dataReal) {
+            dataType = REAL;
+        };
+
+        Data(const sqlite3_int64 dataInt) : dataInt(dataInt) {
+            dataType = INT;
+        };
+
+        Data(const std::string &dataText) : dataText(dataText) {
+            dataType = TEXT;
+        };
+    };
 
 //endregion
 
 //region Members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    private:
-        std::unordered_set<std::string> _keys;
-        std::vector<Data> _values;
-        std::unordered_map<std::string, long> _dataMap;
+private:
+    std::unordered_set<std::string> _keys;
+    std::vector<Data> _values;
+    std::unordered_map<std::string, long> _dataMap;
 
 //endregion
 
 //region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public:
+public:
 
-        MadContentValues();
+    MadContentValues();
 
-        virtual ~MadContentValues();
+    virtual ~MadContentValues();
 
 //endregion
 
 //region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    public:
+public:
 
-        const std::unordered_set<std::string> &keySet() const;
+    const std::unordered_set<std::string> &keySet() const;
 
-        const std::vector<std::string> keys() const;
+    const std::vector<std::string> keys() const;
 
-        bool isEmpty();
+    bool isEmpty();
 
-        bool containsKey(std::string const &key);
+    bool containsKey(std::string const &key);
 
-        DataType typeForKey(std::string const &key);
+    DataType typeForKey(std::string const &key);
 
-        void clear();
+    sqlite3_int64 getAsInteger(std::string const &key);
 
-        sqlite3_int64 getAsInteger(std::string const &key);
+    double getAsReal(std::string const &key);
 
-        double getAsReal(std::string const &key);
+    std::string getAsText(std::string const &key);
 
-        std::string getAsText(std::string const &key);
+    std::vector<madsqlite::byte> getAsBlob(std::string const &key);
 
-        std::vector<madsqlite::byte> getAsBlob(std::string const &key);
+    /**
+     * Adds a value to the set.
+     *
+     * @param key the name of the value to put.
+     * @param value the data for the value to put.
+     */
+    void putInteger(std::string const &key, sqlite3_int64 value);
 
-        void putInteger(std::string const &key, sqlite3_int64 value);
+    /**
+     * Adds a value to the set.
+     *
+     * @param key the name of the value to put.
+     * @param value the data for the value to put.
+     */
+    void putReal(std::string const &key, double value);
 
-        void putReal(std::string const &key, double value);
+    /**
+     * Adds a value to the set.
+     *
+     * @param key the name of the value to put.
+     * @param value the data for the value to put.
+     */
+    void putString(std::string const &key, std::string const &value);
 
-        void putString(std::string const &key, std::string const &value);
+    /**
+     * Adds a value to the set.
+     *
+     * @param key the name of the value to put.
+     * @param value the data for the value to put.
+     */
+    void putBlob(std::string const &key, std::vector<madsqlite::byte> &blob);
 
-        void putBlob(std::string const &key, std::vector<madsqlite::byte> &blob);
+    void putBlob(std::string const &key, const void *blob, size_t sz);
 
-        void putBlob(std::string const &key, const void *blob, size_t sz);
+    /**
+     * Removes all values.
+     */
+    void clear();
 
 //endregion
 
 //region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    private:
+private:
 
-        void putData(std::string const &key, Data &data);
+    void putData(std::string const &key, Data &data);
 
-        Data getData(std::string const &key);
+    Data getData(std::string const &key);
 
-        double stringToDouble(std::string const &str);
+    double stringToDouble(std::string const &str);
 
-        sqlite3_int64 stringToInt(std::string const &str);
+    sqlite3_int64 stringToInt(std::string const &str);
 
-        template<typename T>
-        std::string numberToString(T number);
+    template<typename T>
+    std::string numberToString(T number);
 
 //endregion
 
-    };
+};
 
 }
 

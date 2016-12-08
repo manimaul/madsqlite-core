@@ -46,7 +46,8 @@ public:
     static std::shared_ptr<MadDatabase> openInMemoryDatabase();
 
     /**
-     * For internal implementation.
+     * For internal use.
+     * see ::openInMemoryDatabase and ::openDatabase
      */
     MadDatabase(Impl *impl);
 
