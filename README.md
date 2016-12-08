@@ -10,3 +10,6 @@
 | [MadSqlite Android](https://github.com/manimaul/madsqlite-android) | Java | [![Build Status](https://travis-ci.org/manimaul/madsqlite-android.svg?branch=master)](https://travis-ci.org/manimaul/madsqlite-android) |
 | [MadSqlite iOS Obj-c](https://github.com/manimaul/madsqlite-ios-objc) | Objective-C  | [![Build Status](https://travis-ci.org/manimaul/madsqlite-ios-objc.svg?branch=master)](https://travis-ci.org/manimaul/madsqlite-ios-objc) |
 | [MadSqlite iOS Swift](https://github.com/manimaul/madsqlite-ios-swift) | Swift
+
+##Documentation
+[Classes](https://manimaul.github.io/madsqlite-core/annotated.html)
