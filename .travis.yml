@@ -1,0 +1,19 @@
+sudo: false
+
+language:
+  - cpp
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - ./src/main/cpp/tests/runUnitTests
+
+notifications:
+  email: false
