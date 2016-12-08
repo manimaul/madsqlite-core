@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "../api/MadContentValues.hpp"
+#include "MadContentValues.hpp"
 
 #ifdef ANDROID
 #include <arpa/inet.h>

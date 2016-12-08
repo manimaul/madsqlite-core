@@ -2,7 +2,7 @@
 // Created by William Kamp on 10/10/16.
 //
 
-#include "../api/MadQuery.hpp"
+#include "MadQuery.hpp"
 
 #define CURSOR_STEP_UNKNOWN -1
 
