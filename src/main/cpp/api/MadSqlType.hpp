@@ -7,6 +7,9 @@
 
 namespace madsqlite {
 
+using byte = unsigned char;
+
+//todo: this does not need to be public API
 enum SqlDataType {
     NONE,
     INT,

@@ -7,7 +7,6 @@ include_directories(${SRC_MAIN_DIR}/sqlite-amalgamation/
         ${SRC_MAIN_DIR}/api)
 
 set(SOURCE_FILES
-        ${SRC_MAIN_DIR}/api/MadConstants.hpp
         ${SRC_MAIN_DIR}/api/MadContentValues.hpp
         ${SRC_MAIN_DIR}/api/MadDatabase.hpp
         ${SRC_MAIN_DIR}/api/MadQuery.hpp

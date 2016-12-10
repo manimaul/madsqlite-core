@@ -50,13 +50,11 @@ private:
 
     int execInternal(std::string const &sql);
 
-    bool insert(std::string const &table, std::shared_ptr<MadContentValuesImpl> values);
+    bool insert(std::string const &table, MadContentValues &contentValues);
 
     MadQuery query(std::string const &sql, std::vector<std::string> const &args);
 
     int exec(std::string const &sql);
-
-
 
     void beginTransaction();
 

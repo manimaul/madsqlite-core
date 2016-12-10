@@ -6,7 +6,6 @@
 #define MADSQLITE_DATABASE_H
 
 #include "MadQuery.hpp"
-#include "MadConstants.hpp"
 #include "MadContentValues.hpp"
 #include <string>
 #include <vector>
@@ -22,6 +21,7 @@ class MadDatabaseImpl;
 class MadDatabase {
 
 private:
+
     class Impl;
     std::unique_ptr<Impl> impl;
 

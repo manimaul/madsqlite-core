@@ -10,14 +10,13 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include "MadConstants.hpp"
 #include "MadContentValues.hpp"
 #include "MadSqlType.hpp"
 #include "sqlite3.h"
 
 namespace madsqlite {
 
-class MadContentValuesImpl {
+class MadContentValues::Impl {
 
 public:
 
@@ -61,10 +60,11 @@ public:
 //region Constructor
 
 public:
+    friend class MadDatabase;
 
-    MadContentValuesImpl();
+    Impl();
 
-    virtual ~MadContentValuesImpl();
+    virtual ~Impl();
 
 //endregion
 

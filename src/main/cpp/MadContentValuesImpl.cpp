@@ -15,15 +15,15 @@ using namespace std;
 
 //region MadContentValues Constructor
 
-MadContentValues::MadContentValues() : impl(new MadContentValuesImpl()) {}
+MadContentValues::MadContentValues() : impl(new Impl()) {}
 
 //endregion
 
-//region MadContentValuesImpl Constructor
+//region MadContentValues::Impl Constructor
 
-MadContentValuesImpl::MadContentValuesImpl() {}
+MadContentValues::Impl::Impl() {}
 
-MadContentValuesImpl::~MadContentValuesImpl() {}
+MadContentValues::Impl::~Impl() {}
 
 //endregion
 
@@ -34,62 +34,62 @@ void MadContentValues::clear() {
 }
 
 void MadContentValues::putInteger(string const &key, sqlite3_int64 value) {
-    MadContentValuesImpl::Data d = {value};
+    MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
 
 void MadContentValues::putReal(string const &key, double value) {
-    MadContentValuesImpl::Data d = {value};
+    MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
 
 void MadContentValues::putString(string const &key, string const &value) {
-    MadContentValuesImpl::Data d = {value};
+    MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
 
 void MadContentValues::putBlob(string const &key, vector<byte> &value) {
-    MadContentValuesImpl::Data d = {value};
+    MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
 
 void MadContentValues::putBlob(string const &key, const void *blob, size_t sz) {
     byte *charBuf = (byte *) blob;
     vector<byte> value(charBuf, charBuf + sz);
-    MadContentValuesImpl::Data d = {value};
+    MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
 
 //endregion
 
-//region MadContentValuesImpl Methods
+//region MadContentValues::Impl Methods
 
-const vector<string> MadContentValuesImpl::keys() const {
+const vector<string> MadContentValues::Impl::keys() const {
     return vector<string>(_keys.begin(), _keys.end());
 }
 
-bool MadContentValuesImpl::isEmpty() {
+bool MadContentValues::Impl::isEmpty() {
     return _keys.size() <= 0;
 }
 
-bool MadContentValuesImpl::containsKey(string const &key) {
+bool MadContentValues::Impl::containsKey(string const &key) {
     return _keys.find(key) != _keys.end();
 }
 
-SqlDataType MadContentValuesImpl::typeForKey(string const &key) {
+SqlDataType MadContentValues::Impl::typeForKey(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataType;
     }
     return SqlDataType::NONE;
 }
 
-void MadContentValuesImpl::clear() {
+void MadContentValues::Impl::clear() {
     _keys.clear();
     _values.clear();
     _dataMap.clear();
 }
 
-long long int MadContentValuesImpl::getAsInteger(string const &key) {
+long long int MadContentValues::Impl::getAsInteger(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -114,7 +114,7 @@ long long int MadContentValuesImpl::getAsInteger(string const &key) {
     return 0;
 }
 
-double MadContentValuesImpl::getAsReal(string const &key) {
+double MadContentValues::Impl::getAsReal(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -139,7 +139,7 @@ double MadContentValuesImpl::getAsReal(string const &key) {
     return 0;
 }
 
-string MadContentValuesImpl::getAsText(string const &key) {
+string MadContentValues::Impl::getAsText(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -167,14 +167,14 @@ string MadContentValuesImpl::getAsText(string const &key) {
     return string();
 }
 
-vector<byte> MadContentValuesImpl::getAsBlob(string const &key) {
+vector<byte> MadContentValues::Impl::getAsBlob(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataBlob;
     }
     return vector<byte>();
 }
 
-void MadContentValuesImpl::putData(string const &key, MadContentValuesImpl::Data &data) {
+void MadContentValues::Impl::putData(string const &key, MadContentValues::Impl::Data &data) {
     if (containsKey(key)) {
         long i = _dataMap.at(key);
         _values[i] = data;
@@ -186,18 +186,18 @@ void MadContentValuesImpl::putData(string const &key, MadContentValuesImpl::Data
     _keys.emplace(key);
 }
 
-MadContentValuesImpl::Data MadContentValuesImpl::getData(string const &key) {
+MadContentValues::Impl::Data MadContentValues::Impl::getData(string const &key) {
     long i = _dataMap.at(key);
     return _values[i];
 }
 
-double MadContentValuesImpl::stringToDouble(string const &str) {
+double MadContentValues::Impl::stringToDouble(string const &str) {
     stringstream ss(str);
     double result;
     return ss >> result ? result : 0;
 }
 
-long long int MadContentValuesImpl::stringToInt(string const &str) {
+long long int MadContentValues::Impl::stringToInt(string const &str) {
     stringstream ss(str);
     long long int result;
     return ss >> result ? result : 0;
@@ -205,7 +205,7 @@ long long int MadContentValuesImpl::stringToInt(string const &str) {
 
 template<typename T>
 string
-MadContentValuesImpl::numberToString(T number) {
+MadContentValues::Impl::numberToString(T number) {
     stringstream ss;
     ss << number;
     return ss.str();

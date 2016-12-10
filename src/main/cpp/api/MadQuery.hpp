@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "MadConstants.hpp"
+#include "MadSqlType.hpp"
 #include "sqlite3.h"
 
 namespace madsqlite {

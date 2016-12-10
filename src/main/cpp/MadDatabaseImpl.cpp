@@ -25,7 +25,7 @@ MadDatabase::~MadDatabase() {
 
 //endregion
 
-//region MadDatabaseImpl Constructor
+//region MadDatabase::Impl Constructor
 
 MadDatabase::Impl::Impl(){
     sqlite3_open(":memory:", &db);
@@ -44,8 +44,6 @@ MadDatabase::Impl::~Impl() {
         }
     }
 }
-
-//endregion
 
 shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
     lock_guard<mutex> guard(databaseMutex);
@@ -77,7 +75,11 @@ unique_ptr<MadDatabase> MadDatabase::openInMemoryDatabase() {
 
 //endregion
 
-//region Public Methods 
+//region MadDatabase Methods 
+
+bool MadDatabase::insert(string const &table, MadContentValues &contentValues) {
+    return impl->insert(table, contentValues);
+}
 
 void MadDatabase::beginTransaction() {
     impl->beginTransaction();
@@ -109,7 +111,7 @@ MadQuery MadDatabase::query(string const &sql) {
 
 //endregion
 
-//region Private Methods 
+//region MadDatabase::Impl Methods 
 
 void MadDatabase::Impl::beginTransaction() {
     if (!isInTransaction) {
@@ -157,11 +159,8 @@ int MadDatabase::Impl::execInternal(string const &sql) {
     return sqlite3_changes(db);
 }
 
-bool MadDatabase::insert(string const &table, MadContentValues &contentValues) {
-    return impl->insert(table, contentValues.impl);
-}
-
-bool MadDatabase::Impl::insert(string const &table, shared_ptr<MadContentValuesImpl> values) {
+bool MadDatabase::Impl::insert(string const &table, MadContentValues &contentValues) {
+    auto values = contentValues.impl;
     if (values->isEmpty()) {
         return false;
     }

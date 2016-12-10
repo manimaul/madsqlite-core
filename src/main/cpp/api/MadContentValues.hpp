@@ -7,11 +7,9 @@
 
 #include <string>
 #include <vector>
-#include "MadConstants.hpp"
+#include "MadSqlType.hpp"
 
 namespace madsqlite {
-
-class MadContentValuesImpl;
 
 /**
  * Key values container useful for insertion of data into a MadDatabase.
@@ -19,9 +17,10 @@ class MadContentValuesImpl;
 class MadContentValues {
 
 private:
-    
+
     friend class MadDatabase;
-    std::shared_ptr<MadContentValuesImpl> impl;
+    class Impl;
+    std::shared_ptr<Impl> impl;
 
 public:
 
