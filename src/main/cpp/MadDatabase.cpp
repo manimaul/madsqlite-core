@@ -4,6 +4,7 @@
 
 #include "MadDatabase.hpp"
 #include "MadUtil.hpp"
+#include "MadContentValuesImpl.hpp"
 #include <iostream>
 #include <mutex>
 
@@ -31,7 +32,7 @@ public:
     // Methods
     int execInternal(std::string const &sql);
 
-    bool insert(std::string const &table, MadContentValues &values);
+    bool insert(std::string const &table, MadContentValues &contentValues);
 
     MadQuery query(std::string const &sql, std::vector<std::string> const &args);
 
@@ -182,12 +183,13 @@ int MadDatabase::Impl::execInternal(std::string const &sql) {
     return sqlite3_changes(db);
 }
 
-bool MadDatabase::insert(string const &table, MadContentValues &values) {
-    return impl->insert(table, values);
+bool MadDatabase::insert(string const &table, MadContentValues &contentValues) {
+    return impl->insert(table, contentValues);
 }
 
-bool MadDatabase::Impl::insert(string const &table, MadContentValues &values) {
-    if (values.isEmpty()) {
+bool MadDatabase::Impl::insert(string const &table, MadContentValues &contentValues) {
+    auto values = contentValues.impl;
+    if (values->isEmpty()) {
         return false;
     }
 
@@ -198,7 +200,7 @@ bool MadDatabase::Impl::insert(string const &table, MadContentValues &values) {
      */
     string sql = "INSERT INTO [" + table + "] (";
     string bindings = " VALUES (";
-    auto keys = values.keys();
+    auto keys = values->keys();
     for (auto key: keys) {
         sql += "[" + key + "] ";
 
@@ -220,34 +222,34 @@ bool MadDatabase::Impl::insert(string const &table, MadContentValues &values) {
 
     for (int i = 0; i < keys.size(); ++i) {
         string key = keys.at((unsigned long) i);
-        switch (values.typeForKey(key)) {
-            case MadContentValues::NONE: {
+        switch (values->typeForKey(key)) {
+            case NONE: {
                 break;
             }
-            case MadContentValues::INT: {
-                if (sqlite3_bind_int64(stmt, i + 1, values.getAsInteger(key)) != SQLITE_OK) {
+            case INT: {
+                if (sqlite3_bind_int64(stmt, i + 1, values->getAsInteger(key)) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case MadContentValues::REAL: {
-                if (sqlite3_bind_double(stmt, i + 1, values.getAsReal(key)) != SQLITE_OK) {
+            case REAL: {
+                if (sqlite3_bind_double(stmt, i + 1, values->getAsReal(key)) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case MadContentValues::TEXT: {
-                const string &text = values.getAsText(key);
+            case TEXT: {
+                const string &text = values->getAsText(key);
                 if (sqlite3_bind_text(stmt, i + 1, text.c_str(), (int) text.length(), SQLITE_TRANSIENT) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case MadContentValues::BLOB: {
-                const vector<byte> vector = values.getAsBlob(key);
+            case BLOB: {
+                const vector<byte> vector = values->getAsBlob(key);
                 if (sqlite3_bind_blob(stmt, i + 1, vector.data(), (int) vector.size(), SQLITE_TRANSIENT) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;

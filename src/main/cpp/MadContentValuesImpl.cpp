@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "MadContentValues.hpp"
+#include <MadContentValuesImpl.hpp>
 
 #ifdef ANDROID
 #include <arpa/inet.h>
@@ -13,50 +13,83 @@
 using namespace madsqlite;
 using namespace std;
 
-//region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//endregion
+//region MadContentValues Constructor
 
-//region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-MadContentValues::MadContentValues() {}
-
-MadContentValues::~MadContentValues() {}
+MadContentValues::MadContentValues() : impl(new MadContentValuesImpl()) {}
 
 //endregion
 
-//region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//region MadContentValuesImpl Constructor
 
-const unordered_set<string> &MadContentValues::keySet() const {
-    return _keys;
+MadContentValuesImpl::MadContentValuesImpl() {}
+
+MadContentValuesImpl::~MadContentValuesImpl() {}
+
+//endregion
+
+//region MadContentValues Methods
+
+void MadContentValues::clear() {
+    impl->clear();
 }
 
-const vector<string> MadContentValues::keys() const {
+void MadContentValues::putInteger(string const &key, sqlite3_int64 value) {
+    MadContentValuesImpl::Data d = {value};
+    impl->putData(key, d);
+}
+
+void MadContentValues::putReal(string const &key, double value) {
+    MadContentValuesImpl::Data d = {value};
+    impl->putData(key, d);
+}
+
+void MadContentValues::putString(string const &key, string const &value) {
+    MadContentValuesImpl::Data d = {value};
+    impl->putData(key, d);
+}
+
+void MadContentValues::putBlob(string const &key, vector<byte> &value) {
+    MadContentValuesImpl::Data d = {value};
+    impl->putData(key, d);
+}
+
+void MadContentValues::putBlob(string const &key, const void *blob, size_t sz) {
+    byte *charBuf = (byte *) blob;
+    vector<byte> value(charBuf, charBuf + sz);
+    MadContentValuesImpl::Data d = {value};
+    impl->putData(key, d);
+}
+
+//endregion
+
+//region MadContentValuesImpl Methods
+
+const vector<string> MadContentValuesImpl::keys() const {
     return vector<string>(_keys.begin(), _keys.end());
 }
 
-bool MadContentValues::isEmpty() {
+bool MadContentValuesImpl::isEmpty() {
     return _keys.size() <= 0;
 }
 
-bool MadContentValues::containsKey(string const &key) {
+bool MadContentValuesImpl::containsKey(string const &key) {
     return _keys.find(key) != _keys.end();
 }
 
-MadContentValues::DataType MadContentValues::typeForKey(string const &key) {
+SqlDataType MadContentValuesImpl::typeForKey(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataType;
     }
-    return NONE;
+    return SqlDataType::NONE;
 }
 
-void MadContentValues::clear() {
+void MadContentValuesImpl::clear() {
     _keys.clear();
     _values.clear();
     _dataMap.clear();
 }
 
-sqlite3_int64 MadContentValues::getAsInteger(string const &key) {
+long long int MadContentValuesImpl::getAsInteger(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -81,7 +114,7 @@ sqlite3_int64 MadContentValues::getAsInteger(string const &key) {
     return 0;
 }
 
-double MadContentValues::getAsReal(string const &key) {
+double MadContentValuesImpl::getAsReal(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -106,7 +139,7 @@ double MadContentValues::getAsReal(string const &key) {
     return 0;
 }
 
-string MadContentValues::getAsText(string const &key) {
+string MadContentValuesImpl::getAsText(string const &key) {
     if (containsKey(key)) {
         const Data &data = getData(key);
         switch (data.dataType) {
@@ -134,46 +167,14 @@ string MadContentValues::getAsText(string const &key) {
     return string();
 }
 
-vector<byte> MadContentValues::getAsBlob(string const &key) {
+vector<byte> MadContentValuesImpl::getAsBlob(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataBlob;
     }
     return vector<byte>();
 }
 
-void MadContentValues::putInteger(string const &key, sqlite3_int64 value) {
-    Data d = {value};
-    putData(key, d);
-}
-
-void MadContentValues::putReal(string const &key, double value) {
-    Data d = {value};
-    putData(key, d);
-}
-
-void MadContentValues::putString(string const &key, string const &value) {
-    Data d = {value};
-    putData(key, d);
-}
-
-void MadContentValues::putBlob(string const &key, vector<byte> &value) {
-    Data d = {value};
-    putData(key, d);
-}
-
-void MadContentValues::putBlob(string const &key, const void *blob, size_t sz) {
-    byte *charBuf = (byte *) blob;
-    vector<byte> value(charBuf, charBuf + sz);
-    Data d = {value};
-    putData(key, d);
-}
-
-//endregion
-
-//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-void MadContentValues::putData(string const &key, MadContentValues::Data &data) {
+void MadContentValuesImpl::putData(string const &key, MadContentValuesImpl::Data &data) {
     if (containsKey(key)) {
         long i = _dataMap.at(key);
         _values[i] = data;
@@ -185,26 +186,26 @@ void MadContentValues::putData(string const &key, MadContentValues::Data &data) 
     _keys.emplace(key);
 }
 
-MadContentValues::Data MadContentValues::getData(string const &key) {
+MadContentValuesImpl::Data MadContentValuesImpl::getData(string const &key) {
     long i = _dataMap.at(key);
     return _values[i];
 }
 
-double MadContentValues::stringToDouble(string const &str) {
+double MadContentValuesImpl::stringToDouble(string const &str) {
     stringstream ss(str);
     double result;
     return ss >> result ? result : 0;
 }
 
-sqlite3_int64 MadContentValues::stringToInt(string const &str) {
+long long int MadContentValuesImpl::stringToInt(string const &str) {
     stringstream ss(str);
-    sqlite3_int64 result;
+    long long int result;
     return ss >> result ? result : 0;
 }
 
 template<typename T>
 string
-MadContentValues::numberToString(T number) {
+MadContentValuesImpl::numberToString(T number) {
     stringstream ss;
     ss << number;
     return ss.str();

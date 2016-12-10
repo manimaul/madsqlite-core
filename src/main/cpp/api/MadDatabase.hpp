@@ -23,7 +23,6 @@ class MadDatabase {
 
 private:
     class Impl;
-
     std::unique_ptr<Impl> impl;
 
 //endregion
@@ -65,7 +64,7 @@ public:
      * @param values the values to insert
      * @return if the insertion was successful
      */
-    bool insert(std::string const &table, MadContentValues &values);
+    bool insert(std::string const &table, MadContentValues &contentValues);
 
     /**
      * Execute a sql query
