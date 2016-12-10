@@ -10,14 +10,15 @@ set(SOURCE_FILES
         ${SRC_MAIN_DIR}/api/MadContentValues.hpp
         ${SRC_MAIN_DIR}/api/MadDatabase.hpp
         ${SRC_MAIN_DIR}/api/MadQuery.hpp
-        ${SRC_MAIN_DIR}/api/MadSqlType.hpp
         ${SRC_MAIN_DIR}/MadContentValuesImpl.hpp
         ${SRC_MAIN_DIR}/MadContentValuesImpl.cpp
         ${SRC_MAIN_DIR}/MadDatabaseImpl.hpp
         ${SRC_MAIN_DIR}/MadDatabaseImpl.cpp
-        ${SRC_MAIN_DIR}/MadQuery.cpp
+        ${SRC_MAIN_DIR}/MadQueryImpl.hpp
+        ${SRC_MAIN_DIR}/MadQueryImpl.cpp
         ${SRC_MAIN_DIR}/MadUtil.hpp
-        ${SRC_MAIN_DIR}/sqlite-amalgamation/sqlite3.c)
+        ${SRC_MAIN_DIR}/sqlite-amalgamation/sqlite3.c
+        )
 
 add_definitions(-DSQLITE_ENABLE_RTREE)
 #add_definitions(-DSQLITE_ENABLE_FTS4)

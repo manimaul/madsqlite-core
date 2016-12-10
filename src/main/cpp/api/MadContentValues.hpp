@@ -18,7 +18,9 @@ class MadContentValues {
 private:
 
     friend class MadDatabase;
+
     class Impl;
+
     std::shared_ptr<Impl> impl;
 
 public:

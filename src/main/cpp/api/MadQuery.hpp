@@ -7,38 +7,39 @@
 
 #include <string>
 #include <vector>
-#include "sqlite3.h"
 
 namespace madsqlite {
 
 class MadQuery {
 
-//region Members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 private:
 
-    sqlite3_stmt *statement;
-    int position = -1;
-    int stepResult = -1;
+    friend class MadDatabase;
 
-//endregion
+    class Impl;
 
-//region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    std::unique_ptr<Impl> impl;
 
 public:
 
-    MadQuery(sqlite3_stmt *statement);
+    /**
+     * For internal use.
+     */
+    MadQuery(std::unique_ptr<Impl> impl);
 
-    MadQuery(MadQuery &&query);
+    /**
+     * Copying a query is disallowed.
+     */
+    MadQuery(MadQuery &other) = delete;
 
-    MadQuery(MadQuery &query) = delete; // disallow copy
-    virtual ~MadQuery();
+    /**
+     * Moving a query is allowed.
+     *
+     * @param other the query to move.
+     */
+    MadQuery(MadQuery &&other);
 
-//endregion
-
-//region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-public:
+    ~MadQuery();
 
     /**
      * Move the query to the first row.
@@ -81,16 +82,7 @@ public:
      */
     double getReal(int columnIndex);
 
-//endregion
-
-//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-private:
-
-//endregion
-
 };
-
 }
 
 #endif //PROJECT_CURSOR_H

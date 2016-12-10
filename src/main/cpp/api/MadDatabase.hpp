@@ -23,6 +23,7 @@ class MadDatabase {
 private:
 
     class Impl;
+
     std::unique_ptr<Impl> impl;
 
 public:

@@ -19,7 +19,7 @@ static void print(string const &msg, int &value) {
     cout << msg << " " << value << endl;
 }
 
-static void print(string const &msg, sqlite3_int64 &value) {
+static void print(string const &msg, long long int &value) {
     cout << msg << " " << value << endl;
 }
 
@@ -56,7 +56,7 @@ void db() {
     auto cursor = db->query("SELECT * FROM test");
     cursor.moveToFirst();
     while (!cursor.isAfterLast()) {
-        sqlite3_int64 storedX = cursor.getInt(0);
+        long long int storedX = cursor.getInt(0);
         print("x:", storedX);
         string storedY = cursor.getString(1);
         print("y:", storedY);

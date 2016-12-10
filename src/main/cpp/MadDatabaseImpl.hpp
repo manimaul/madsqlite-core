@@ -21,6 +21,7 @@ class MadDatabase::Impl {
 //region Constructor
 
 public:
+
     friend class MadDatabase;
 
     Impl();

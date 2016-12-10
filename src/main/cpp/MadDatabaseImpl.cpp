@@ -2,11 +2,13 @@
 // Created by William Kamp on 10/9/16.
 //
 
+#include "MadQueryImpl.hpp"
 #include "MadDatabase.hpp"
 #include "MadDatabaseImpl.hpp"
 #include "MadUtil.hpp"
 #include "MadContentValuesImpl.hpp"
 #include <iostream>
+#include <memory>
 
 using namespace madsqlite;
 using namespace std;
@@ -20,8 +22,7 @@ MadDatabase::MadDatabase(std::unique_ptr<Impl> impl) : impl(move(impl)) {}
 
 // Note: PIMPL with unique_ptr requires a declared deconstructor otherwise the compiler generates a default one which
 // needs a complete declaration
-MadDatabase::~MadDatabase() {
-}
+MadDatabase::~MadDatabase() {}
 
 //endregion
 
@@ -266,7 +267,8 @@ MadQuery MadDatabase::Impl::query(string const &sql, vector<string> const &args)
             cout << "Could not bind text: " << str << endl;
         }
     }
-    return MadQuery(stmt);
+    auto impl = make_unique<MadQuery::Impl>(stmt);
+    return MadQuery(move(impl));
 }
 
 //endregion
