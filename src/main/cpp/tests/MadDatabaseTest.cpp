@@ -4,6 +4,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "MadDatabase.hpp"
+#include <math.h>
 
 using namespace madsqlite;
 using namespace std;

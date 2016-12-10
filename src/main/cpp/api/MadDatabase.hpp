@@ -5,32 +5,25 @@
 #ifndef MADSQLITE_DATABASE_H
 #define MADSQLITE_DATABASE_H
 
-
-#include "sqlite3.h"
 #include "MadQuery.hpp"
 #include "MadConstants.hpp"
 #include "MadContentValues.hpp"
 #include <string>
+#include <vector>
 #include <memory>
-#include <unordered_map>
 
 namespace madsqlite {
 
+class MadDatabaseImpl;
 
+/**
+ * Opens, creates and provides access to a sqlite database.
+ */
 class MadDatabase {
-
-//region Inner Classes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 private:
     class Impl;
     std::unique_ptr<Impl> impl;
-
-//endregion
-
-//region Members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//endregion
-
-//region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 public:
 
@@ -43,13 +36,15 @@ public:
     /**
      * Opens an in memory database an in memory database.
      */
-    static std::shared_ptr<MadDatabase> openInMemoryDatabase();
+    static std::unique_ptr<MadDatabase> openInMemoryDatabase();
 
     /**
      * For internal use.
-     * see ::openInMemoryDatabase and ::openDatabase
+     * See MadDatabase::openDatabase
      */
-    MadDatabase(Impl *impl);
+    MadDatabase(std::unique_ptr<Impl> impl);
+
+    virtual ~MadDatabase();
 
 //endregion
 
@@ -110,11 +105,6 @@ public:
      * Commits a previously begun transaction.
      */
     void commitTransaction();
-
-//endregion
-
-//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//endregion
 
 };
 }

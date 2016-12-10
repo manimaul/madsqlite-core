@@ -32,7 +32,8 @@ static void print(string const &msg, vector<byte> &blob) {
 }
 
 void db() {
-    auto db = MadDatabase::openDatabase("/Users/williamkamp/Desktop/tempzzz.s3db");
+    auto db = MadDatabase::openDatabase("temp.s3db");
+//    auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(x INTEGER, "
                     "y TEXT, "
                     "z BLOB);");

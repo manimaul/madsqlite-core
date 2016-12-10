@@ -14,7 +14,8 @@ set(SOURCE_FILES
         ${SRC_MAIN_DIR}/api/MadSqlType.hpp
         ${SRC_MAIN_DIR}/MadContentValuesImpl.hpp
         ${SRC_MAIN_DIR}/MadContentValuesImpl.cpp
-        ${SRC_MAIN_DIR}/MadDatabase.cpp
+        ${SRC_MAIN_DIR}/MadDatabaseImpl.hpp
+        ${SRC_MAIN_DIR}/MadDatabaseImpl.cpp
         ${SRC_MAIN_DIR}/MadQuery.cpp
         ${SRC_MAIN_DIR}/MadUtil.hpp
         ${SRC_MAIN_DIR}/sqlite-amalgamation/sqlite3.c)

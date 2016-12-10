@@ -3,59 +3,31 @@
 //
 
 #include "MadDatabase.hpp"
+#include "MadDatabaseImpl.hpp"
 #include "MadUtil.hpp"
 #include "MadContentValuesImpl.hpp"
 #include <iostream>
-#include <mutex>
 
 using namespace madsqlite;
 using namespace std;
 
-static mutex databaseMutex;
-static unordered_map<string, weak_ptr<MadDatabase>> databaseSet = unordered_map<string, weak_ptr<MadDatabase>>();
+static mutex databaseMutex = {};
+static unordered_map<string, weak_ptr<MadDatabase>> databaseSet = {};
 
+//region MadDatabase Constructor
 
-class MadDatabase::Impl {
+MadDatabase::MadDatabase(std::unique_ptr<Impl> impl) : impl(move(impl)) {}
 
-public:
-    Impl();
+// Note: PIMPL with unique_ptr requires a declared deconstructor otherwise the compiler generates a default one which
+// needs a complete declaration
+MadDatabase::~MadDatabase() {
+}
 
-    Impl(string const &dbPath);
-
-    virtual ~Impl();
-
-    // Members
-    sqlite3 *db;
-    bool isInTransaction = false;
-    const std::unordered_set<std::string> transactionKeyWords = {"BEGIN", "COMMIT", "ROLLBACK"};
-
-    // Methods
-    int execInternal(std::string const &sql);
-
-    bool insert(std::string const &table, MadContentValues &contentValues);
-
-    MadQuery query(std::string const &sql, std::vector<std::string> const &args);
-
-    int exec(std::string const &sql);
-
-    std::string getError(bool guard);
-
-    void beginTransaction();
-
-    void rollbackTransaction();
-
-    void commitTransaction();
-
-};
-
-//region Class Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //endregion
 
-//region Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//region MadDatabaseImpl Constructor
 
-MadDatabase::MadDatabase(MadDatabase::Impl *impl) : impl(impl) {}
-
-MadDatabase::Impl::Impl() {
+MadDatabase::Impl::Impl(){
     sqlite3_open(":memory:", &db);
 }
 
@@ -73,11 +45,9 @@ MadDatabase::Impl::~Impl() {
     }
 }
 
-std::shared_ptr<MadDatabase> MadDatabase::openInMemoryDatabase() {
-    return make_shared<MadDatabase>(new Impl());
-}
+//endregion
 
-std::shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
+shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
     lock_guard<mutex> guard(databaseMutex);
     auto absPath = getAbsoluteFilePath(dbPath);
     if (absPath.length()) {
@@ -91,19 +61,23 @@ std::shared_ptr<MadDatabase> MadDatabase::openDatabase(string const &dbPath) {
         }
     }
 
-    auto imp = new Impl(dbPath);
+    auto imp = make_unique<Impl>(dbPath);
     auto err = imp->getError(false);
-    auto ptr = make_shared<MadDatabase>(imp);
+    auto ptr = make_shared<MadDatabase>(move(imp));
     absPath = getAbsoluteFilePath(dbPath);
     if (absPath.length() && !err.length()) {
         databaseSet.emplace(getAbsoluteFilePath(dbPath), ptr);
     }
-    return move(ptr);
+    return ptr;
+}
+
+unique_ptr<MadDatabase> MadDatabase::openInMemoryDatabase() {
+    return make_unique<MadDatabase>(make_unique<Impl>());
 }
 
 //endregion
 
-//region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//region Public Methods 
 
 void MadDatabase::beginTransaction() {
     impl->beginTransaction();
@@ -135,7 +109,7 @@ MadQuery MadDatabase::query(string const &sql) {
 
 //endregion
 
-//region Private Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//region Private Methods 
 
 void MadDatabase::Impl::beginTransaction() {
     if (!isInTransaction) {
@@ -166,7 +140,7 @@ int MadDatabase::Impl::exec(string const &sql) {
     return execInternal(sql);
 }
 
-int MadDatabase::Impl::execInternal(std::string const &sql) {
+int MadDatabase::Impl::execInternal(string const &sql) {
     lock_guard<mutex> guard(databaseMutex);
     char *errorMessage = 0;
     int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errorMessage);
@@ -184,11 +158,10 @@ int MadDatabase::Impl::execInternal(std::string const &sql) {
 }
 
 bool MadDatabase::insert(string const &table, MadContentValues &contentValues) {
-    return impl->insert(table, contentValues);
+    return impl->insert(table, contentValues.impl);
 }
 
-bool MadDatabase::Impl::insert(string const &table, MadContentValues &contentValues) {
-    auto values = contentValues.impl;
+bool MadDatabase::Impl::insert(string const &table, shared_ptr<MadContentValuesImpl> values) {
     if (values->isEmpty()) {
         return false;
     }
@@ -269,9 +242,9 @@ bool MadDatabase::Impl::insert(string const &table, MadContentValues &contentVal
     return true;
 }
 
-string MadDatabase::Impl::getError(bool guard) {
-    if (guard)
-        lock_guard<mutex> g(databaseMutex);
+string MadDatabase::Impl::getError(bool doLock) {
+    if (doLock)
+        lock_guard<mutex> guard(databaseMutex);
     auto err = string(sqlite3_errmsg(db));
     if (err.compare("not an error") == 0 || err.compare("unknown error") == 0) {
         return "";
