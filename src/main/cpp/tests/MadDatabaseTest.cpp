@@ -144,7 +144,7 @@ TEST(MadDatabaseTests, InsertBlob) {
     EXPECT_EQ("", db->getError());
 
     auto cv = MadContentValues();
-    vector<byte> data = {'d', 'a', 't', 'a'};
+    vector<unsigned char> data = {'d', 'a', 't', 'a'};
     cv.putBlob("keyBlob", data);
     EXPECT_TRUE(db->insert("test", cv));
     EXPECT_EQ("", db->getError());

@@ -75,7 +75,7 @@ unique_ptr<MadDatabase> MadDatabase::openInMemoryDatabase() {
 
 //endregion
 
-//region MadDatabase Methods 
+//region MadDatabase Methods
 
 bool MadDatabase::insert(string const &table, MadContentValues &contentValues) {
     return impl->insert(table, contentValues);
@@ -111,7 +111,7 @@ MadQuery MadDatabase::query(string const &sql) {
 
 //endregion
 
-//region MadDatabase::Impl Methods 
+//region MadDatabase::Impl Methods
 
 void MadDatabase::Impl::beginTransaction() {
     if (!isInTransaction) {
@@ -195,24 +195,24 @@ bool MadDatabase::Impl::insert(string const &table, MadContentValues &contentVal
     for (int i = 0; i < keys.size(); ++i) {
         string key = keys.at((unsigned long) i);
         switch (values->typeForKey(key)) {
-            case NONE: {
+            case MadContentValues::Impl::SqlDataType::NONE: {
                 break;
             }
-            case INT: {
+            case MadContentValues::Impl::SqlDataType::INT: {
                 if (sqlite3_bind_int64(stmt, i + 1, values->getAsInteger(key)) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case REAL: {
+            case MadContentValues::Impl::SqlDataType::REAL: {
                 if (sqlite3_bind_double(stmt, i + 1, values->getAsReal(key)) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;
                 };
                 break;
             }
-            case TEXT: {
+            case MadContentValues::Impl::SqlDataType::TEXT: {
                 const string &text = values->getAsText(key);
                 if (sqlite3_bind_text(stmt, i + 1, text.c_str(), (int) text.length(), SQLITE_TRANSIENT) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
@@ -220,8 +220,8 @@ bool MadDatabase::Impl::insert(string const &table, MadContentValues &contentVal
                 };
                 break;
             }
-            case BLOB: {
-                const vector<byte> vector = values->getAsBlob(key);
+            case MadContentValues::Impl::SqlDataType::BLOB: {
+                const vector<unsigned char> vector = values->getAsBlob(key);
                 if (sqlite3_bind_blob(stmt, i + 1, vector.data(), (int) vector.size(), SQLITE_TRANSIENT) != SQLITE_OK) {
                     cout << "Could not bind statement." << endl;
                     return -1;

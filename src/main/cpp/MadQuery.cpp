@@ -67,11 +67,11 @@ const string MadQuery::getString(int columnIndex) const {
     return "";
 }
 
-const vector<byte> MadQuery::getBlob(int columnIndex) const {
+const vector<unsigned char> MadQuery::getBlob(int columnIndex) const {
     const void *blob = sqlite3_column_blob(statement, columnIndex);
     int sz = sqlite3_column_bytes(statement, columnIndex);
-    const byte *charBuf = reinterpret_cast<const byte*>(blob);
-    vector<byte> value(charBuf, charBuf + sz);
+    const unsigned char *charBuf = reinterpret_cast<const unsigned char*>(blob);
+    vector<unsigned char> value(charBuf, charBuf + sz);
     return value;
 }
 

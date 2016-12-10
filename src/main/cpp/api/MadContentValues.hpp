@@ -7,7 +7,6 @@
 
 #include <string>
 #include <vector>
-#include "MadSqlType.hpp"
 
 namespace madsqlite {
 
@@ -59,7 +58,7 @@ public:
      * @param key the name of the value to put.
      * @param value the data for the value to put.
      */
-    void putBlob(std::string const &key, std::vector<madsqlite::byte> &value);
+    void putBlob(std::string const &key, std::vector<unsigned char> &value);
 
     /**
      * Adds a value to the set.

@@ -11,7 +11,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "MadContentValues.hpp"
-#include "MadSqlType.hpp"
 #include "sqlite3.h"
 
 namespace madsqlite {
@@ -19,10 +18,17 @@ namespace madsqlite {
 class MadContentValues::Impl {
 
 public:
+    enum SqlDataType {
+        NONE,
+        INT,
+        REAL,
+        TEXT,
+        BLOB,
+    };
 
     struct Data {
         SqlDataType dataType;
-        std::vector<madsqlite::byte> dataBlob;
+        std::vector<unsigned char> dataBlob;
         double dataReal;
         long long int dataInt;
         std::string dataText;
@@ -30,7 +36,7 @@ public:
         Data() {
         };
 
-        Data(const std::vector<madsqlite::byte> &dataBlob) : dataBlob(dataBlob) {
+        Data(const std::vector<unsigned char> &dataBlob) : dataBlob(dataBlob) {
             dataType = SqlDataType::BLOB;
         };
 
@@ -88,7 +94,7 @@ public:
 
     std::string getAsText(std::string const &key);
 
-    std::vector<madsqlite::byte> getAsBlob(std::string const &key);
+    std::vector<unsigned char> getAsBlob(std::string const &key);
 
     void putData(std::string const &key, Data &data);
 

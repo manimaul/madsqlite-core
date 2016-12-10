@@ -23,9 +23,9 @@ static void print(string const &msg, sqlite3_int64 &value) {
     cout << msg << " " << value << endl;
 }
 
-static void print(string const &msg, vector<byte> &blob) {
+static void print(string const &msg, vector<unsigned char> &blob) {
     cout << msg << " ";
-    for (byte &b : blob) {
+    for (unsigned char &b : blob) {
         cout << b;
     }
     cout << endl;
@@ -60,7 +60,7 @@ void db() {
         print("x:", storedX);
         string storedY = cursor.getString(1);
         print("y:", storedY);
-        vector<byte> storedBlob = cursor.getBlob(2);
+        vector<unsigned char> storedBlob = cursor.getBlob(2);
         print("z:", storedBlob);
         cursor.moveToNext();
     }

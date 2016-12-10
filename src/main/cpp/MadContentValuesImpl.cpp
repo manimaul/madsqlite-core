@@ -48,14 +48,14 @@ void MadContentValues::putString(string const &key, string const &value) {
     impl->putData(key, d);
 }
 
-void MadContentValues::putBlob(string const &key, vector<byte> &value) {
+void MadContentValues::putBlob(string const &key, vector<unsigned char> &value) {
     MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
 
 void MadContentValues::putBlob(string const &key, const void *blob, size_t sz) {
-    byte *charBuf = (byte *) blob;
-    vector<byte> value(charBuf, charBuf + sz);
+    unsigned char *charBuf = (unsigned char *) blob;
+    vector<unsigned char> value(charBuf, charBuf + sz);
     MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
@@ -76,7 +76,7 @@ bool MadContentValues::Impl::containsKey(string const &key) {
     return _keys.find(key) != _keys.end();
 }
 
-SqlDataType MadContentValues::Impl::typeForKey(string const &key) {
+MadContentValues::Impl::SqlDataType MadContentValues::Impl::typeForKey(std::string const &key) {
     if (containsKey(key)) {
         return getData(key).dataType;
     }
@@ -167,11 +167,11 @@ string MadContentValues::Impl::getAsText(string const &key) {
     return string();
 }
 
-vector<byte> MadContentValues::Impl::getAsBlob(string const &key) {
+vector<unsigned char> MadContentValues::Impl::getAsBlob(string const &key) {
     if (containsKey(key)) {
         return getData(key).dataBlob;
     }
-    return vector<byte>();
+    return vector<unsigned char>();
 }
 
 void MadContentValues::Impl::putData(string const &key, MadContentValues::Impl::Data &data) {

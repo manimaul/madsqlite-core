@@ -7,7 +7,6 @@
 
 #include <string>
 #include <vector>
-#include "MadSqlType.hpp"
 #include "sqlite3.h"
 
 namespace madsqlite {
@@ -68,7 +67,7 @@ public:
      * @param columnIndex the zero-based index of the target column.
      * @return the value of that column as data.
      */
-    const std::vector<byte> getBlob(int columnIndex) const;
+    const std::vector<unsigned char> getBlob(int columnIndex) const;
 
     /**
      * @param columnIndex the zero-based index of the target column.
