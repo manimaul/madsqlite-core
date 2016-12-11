@@ -7,8 +7,8 @@ using namespace std;
 using namespace madsqlite;
 
 // smart pointer reference counting
-using mad_db_ptr = std::shared_ptr<MadDatabase>;
-static std::vector<mad_db_ptr> dbPtrs = std::vector<mad_db_ptr>();
+using mad_db_ptr = shared_ptr<MadDatabase>;
+static vector<mad_db_ptr> dbPtrs = vector<mad_db_ptr>();
 
 /*
  * How to find java class,field and method signatures:
@@ -302,15 +302,16 @@ Java_io_madrona_madsqlite_JniBridge_openDatabase(JNIEnv *env,
                                                  jstring absPath) {
     if (absPath) {
         const char *path = env->GetStringUTFChars(absPath, 0);
-        auto ptr = MadDatabase::openDatabase(path);
-        dbPtrs.push_back(ptr);
-        jlong retVal = reinterpret_cast<jlong>(ptr.get());
+        auto sPtr = MadDatabase::openDatabase(path);
+        dbPtrs.push_back(sPtr);
+        jlong retVal = reinterpret_cast<jlong>(sPtr.get());
         env->ReleaseStringUTFChars(absPath, path);
         return retVal;
     } else {
-        auto ptr = MadDatabase::openInMemoryDatabase();
-        dbPtrs.push_back(std::unique_ptr<MadDatabase>(std::move(ptr)));
-        return reinterpret_cast<jlong>(ptr.get());
+        auto uPtr = MadDatabase::openInMemoryDatabase();
+        auto sPtr = shared_ptr<MadDatabase>(move(uPtr));
+        dbPtrs.push_back(sPtr);
+        return reinterpret_cast<jlong>(sPtr.get());
     }
 }
 
@@ -319,7 +320,7 @@ Java_io_madrona_madsqlite_JniBridge_closeDatabase(JNIEnv,
                                                   jclass,
                                                   jlong nativePtr) {
     MadDatabase *db = reinterpret_cast<MadDatabase *>(nativePtr);
-    dbPtrs.erase(std::remove_if(dbPtrs.begin(), dbPtrs.end(), [db](mad_db_ptr i) {
+    dbPtrs.erase(remove_if(dbPtrs.begin(), dbPtrs.end(), [db](mad_db_ptr i) {
         return i.get() == db;
     }), dbPtrs.end());
 }
