@@ -1,11 +1,15 @@
 \hypertarget{classmadsqlite_1_1_mad_database}{}\section{madsqlite\+:\+:Mad\+Database Class Reference}
 \label{classmadsqlite_1_1_mad_database}\index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
+
+
+{\ttfamily \#include $<$Mad\+Database.\+hpp$>$}
+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classmadsqlite_1_1_mad_database_adeaa573aff2327d76018be2db2ecf638}{Mad\+Database} (Impl $\ast$impl)
+\hyperlink{classmadsqlite_1_1_mad_database_a11eaaa62452515ae78f3879616862213}{Mad\+Database} (std\+::unique\+\_\+ptr$<$ Impl $>$ impl)
 \item 
-bool \hyperlink{classmadsqlite_1_1_mad_database_a9383a29a4411d29a5345cd233e32756d}{insert} (std\+::string const \&table, \hyperlink{classmadsqlite_1_1_mad_content_values}{Mad\+Content\+Values} \&values)
+bool \hyperlink{classmadsqlite_1_1_mad_database_a29207a153e3a92eec7d718efd4c7b3a3}{insert} (std\+::string const \&table, \hyperlink{classmadsqlite_1_1_mad_content_values}{Mad\+Content\+Values} \&content\+Values)
 \item 
 \hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \hyperlink{classmadsqlite_1_1_mad_database_a6fb119ea383a9d93b7d3a5ddce7bc756}{query} (std\+::string const \&sql)
 \item 
@@ -26,18 +30,21 @@ void \hyperlink{classmadsqlite_1_1_mad_database_a438b3c7393a84de57b638db06d84bd7
 \item 
 static std\+::shared\+\_\+ptr$<$ \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database} $>$ \hyperlink{classmadsqlite_1_1_mad_database_a68c5b61e4cf000f4947f9c43a2c12338}{open\+Database} (std\+::string const \&db\+Path)
 \item 
-static std\+::shared\+\_\+ptr$<$ \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database} $>$ \hyperlink{classmadsqlite_1_1_mad_database_ac38e0559a2d724541d8ac7102db4fcd1}{open\+In\+Memory\+Database} ()
+static std\+::unique\+\_\+ptr$<$ \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database} $>$ \hyperlink{classmadsqlite_1_1_mad_database_a29c3ca4b75520e39977ca37ea71354b6}{open\+In\+Memory\+Database} ()
 \end{DoxyCompactItemize}
 
 
+\subsection{Detailed Description}
+Opens, creates and provides access to a sqlite database. 
+
 \subsection{Constructor \& Destructor Documentation}
-\hypertarget{classmadsqlite_1_1_mad_database_adeaa573aff2327d76018be2db2ecf638}{}\label{classmadsqlite_1_1_mad_database_adeaa573aff2327d76018be2db2ecf638} 
+\hypertarget{classmadsqlite_1_1_mad_database_a11eaaa62452515ae78f3879616862213}{}\label{classmadsqlite_1_1_mad_database_a11eaaa62452515ae78f3879616862213} 
 \index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!Mad\+Database@{Mad\+Database}}
 \index{Mad\+Database@{Mad\+Database}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
 \subsubsection{\texorpdfstring{Mad\+Database()}{MadDatabase()}}
-{\footnotesize\ttfamily madsqlite\+::\+Mad\+Database\+::\+Mad\+Database (\begin{DoxyParamCaption}\item[{Impl $\ast$}]{impl }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily madsqlite\+::\+Mad\+Database\+::\+Mad\+Database (\begin{DoxyParamCaption}\item[{std\+::unique\+\_\+ptr$<$ Impl $>$}]{impl }\end{DoxyParamCaption})}
 
-For internal use. see \+::open\+In\+Memory\+Database and \+::open\+Database 
+For internal use. See \hyperlink{classmadsqlite_1_1_mad_database_a68c5b61e4cf000f4947f9c43a2c12338}{Mad\+Database\+::open\+Database} 
 
 \subsection{Member Function Documentation}
 \hypertarget{classmadsqlite_1_1_mad_database_a985f7430489959d345b01ffc191a70d5}{}\label{classmadsqlite_1_1_mad_database_a985f7430489959d345b01ffc191a70d5} 
@@ -77,11 +84,11 @@ the number of rows modified by those S\+QL statements (I\+N\+S\+E\+RT, U\+P\+D\+
 \begin{DoxyReturn}{Returns}
 the most recent database A\+PI call error message. 
 \end{DoxyReturn}
-\hypertarget{classmadsqlite_1_1_mad_database_a9383a29a4411d29a5345cd233e32756d}{}\label{classmadsqlite_1_1_mad_database_a9383a29a4411d29a5345cd233e32756d} 
+\hypertarget{classmadsqlite_1_1_mad_database_a29207a153e3a92eec7d718efd4c7b3a3}{}\label{classmadsqlite_1_1_mad_database_a29207a153e3a92eec7d718efd4c7b3a3} 
 \index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!insert@{insert}}
 \index{insert@{insert}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
 \subsubsection{\texorpdfstring{insert()}{insert()}}
-{\footnotesize\ttfamily bool madsqlite\+::\+Mad\+Database\+::insert (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{table,  }\item[{\hyperlink{classmadsqlite_1_1_mad_content_values}{Mad\+Content\+Values} \&}]{values }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool madsqlite\+::\+Mad\+Database\+::insert (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{table,  }\item[{\hyperlink{classmadsqlite_1_1_mad_content_values}{Mad\+Content\+Values} \&}]{content\+Values }\end{DoxyParamCaption})}
 
 Insert values into a table
 
@@ -106,11 +113,11 @@ Opens a database.
 {\em db\+Path} & the absolute path of the database to open / create. \\
 \hline
 \end{DoxyParams}
-\hypertarget{classmadsqlite_1_1_mad_database_ac38e0559a2d724541d8ac7102db4fcd1}{}\label{classmadsqlite_1_1_mad_database_ac38e0559a2d724541d8ac7102db4fcd1} 
+\hypertarget{classmadsqlite_1_1_mad_database_a29c3ca4b75520e39977ca37ea71354b6}{}\label{classmadsqlite_1_1_mad_database_a29c3ca4b75520e39977ca37ea71354b6} 
 \index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!open\+In\+Memory\+Database@{open\+In\+Memory\+Database}}
 \index{open\+In\+Memory\+Database@{open\+In\+Memory\+Database}!madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}}
 \subsubsection{\texorpdfstring{open\+In\+Memory\+Database()}{openInMemoryDatabase()}}
-{\footnotesize\ttfamily static std\+::shared\+\_\+ptr$<$\hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database}$>$ madsqlite\+::\+Mad\+Database\+::open\+In\+Memory\+Database (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static std\+::unique\+\_\+ptr$<$\hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database}$>$ madsqlite\+::\+Mad\+Database\+::open\+In\+Memory\+Database (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 Opens an in memory database an in memory database. \hypertarget{classmadsqlite_1_1_mad_database_a6fb119ea383a9d93b7d3a5ddce7bc756}{}\label{classmadsqlite_1_1_mad_database_a6fb119ea383a9d93b7d3a5ddce7bc756} 
 \index{madsqlite\+::\+Mad\+Database@{madsqlite\+::\+Mad\+Database}!query@{query}}

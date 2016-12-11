@@ -69,9 +69,17 @@ $(function() {
 <div class="title">madsqlite::MadQuery Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_mad_query_8hpp_source.html">MadQuery.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a4e7a3212c6dd8c86e5579e43627b9013"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a4e7a3212c6dd8c86e5579e43627b9013">MadQuery</a> (std::unique_ptr&lt; Impl &gt; impl)</td></tr>
+<tr class="separator:a4e7a3212c6dd8c86e5579e43627b9013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52f4a1417de26c9e2edb46bae17892ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a52f4a1417de26c9e2edb46bae17892ef">MadQuery</a> (<a class="el" href="classmadsqlite_1_1_mad_query.html">MadQuery</a> &amp;other)=delete</td></tr>
+<tr class="separator:a52f4a1417de26c9e2edb46bae17892ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a4ebbd16bfc54d95fc7a87517d4f21e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a0a4ebbd16bfc54d95fc7a87517d4f21e">MadQuery</a> (<a class="el" href="classmadsqlite_1_1_mad_query.html">MadQuery</a> &amp;&amp;other)</td></tr>
+<tr class="separator:a0a4ebbd16bfc54d95fc7a87517d4f21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37a601031ecedf20e53b8c0f610f74b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a37a601031ecedf20e53b8c0f610f74b0">moveToFirst</a> ()</td></tr>
 <tr class="separator:a37a601031ecedf20e53b8c0f610f74b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eecba50378a4577803aff41671829fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a2eecba50378a4577803aff41671829fe">moveToNext</a> ()</td></tr>
@@ -80,22 +88,96 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0fa757aa8333e3fc53c57442bdf4cad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63b55fe68d013c3d1fdade2391233cb9"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a63b55fe68d013c3d1fdade2391233cb9">getString</a> (int columnIndex) const</td></tr>
 <tr class="separator:a63b55fe68d013c3d1fdade2391233cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade5b4bc30c7876eeeb62e2f0bb8fc111"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; byte &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#ade5b4bc30c7876eeeb62e2f0bb8fc111">getBlob</a> (int columnIndex) const</td></tr>
-<tr class="separator:ade5b4bc30c7876eeeb62e2f0bb8fc111"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f39ec059990e88d11b3d11244283000"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#a4f39ec059990e88d11b3d11244283000">getBlob</a> (int columnIndex) const</td></tr>
+<tr class="separator:a4f39ec059990e88d11b3d11244283000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab04d59c89fccfd773f77276219f4d376"><td class="memItemLeft" align="right" valign="top">long long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#ab04d59c89fccfd773f77276219f4d376">getInt</a> (int columnIndex)</td></tr>
 <tr class="separator:ab04d59c89fccfd773f77276219f4d376"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1d5375285453976e078f320c73e224f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_query.html#ab1d5375285453976e078f320c73e224f">getReal</a> (int columnIndex)</td></tr>
 <tr class="separator:ab1d5375285453976e078f320c73e224f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ade5b4bc30c7876eeeb62e2f0bb8fc111"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade5b4bc30c7876eeeb62e2f0bb8fc111">&sect;&nbsp;</a></span>getBlob()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provides read access to the result set returned by a sqlite database query. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a4e7a3212c6dd8c86e5579e43627b9013"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e7a3212c6dd8c86e5579e43627b9013">&sect;&nbsp;</a></span>MadQuery() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const std::vector&lt;byte&gt; madsqlite::MadQuery::getBlob </td>
+          <td class="memname">madsqlite::MadQuery::MadQuery </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; Impl &gt;&#160;</td>
+          <td class="paramname"><em>impl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>For internal use. </p>
+
+</div>
+</div>
+<a id="a52f4a1417de26c9e2edb46bae17892ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52f4a1417de26c9e2edb46bae17892ef">&sect;&nbsp;</a></span>MadQuery() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">madsqlite::MadQuery::MadQuery </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmadsqlite_1_1_mad_query.html">MadQuery</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Copying a query is disallowed. </p>
+
+</div>
+</div>
+<a id="a0a4ebbd16bfc54d95fc7a87517d4f21e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a4ebbd16bfc54d95fc7a87517d4f21e">&sect;&nbsp;</a></span>MadQuery() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">madsqlite::MadQuery::MadQuery </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmadsqlite_1_1_mad_query.html">MadQuery</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Moving a query is allowed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the query to move. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4f39ec059990e88d11b3d11244283000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f39ec059990e88d11b3d11244283000">&sect;&nbsp;</a></span>getBlob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;unsigned char&gt; madsqlite::MadQuery::getBlob </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>columnIndex</em></td><td>)</td>

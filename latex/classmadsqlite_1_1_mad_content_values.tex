@@ -1,19 +1,39 @@
 \hypertarget{classmadsqlite_1_1_mad_content_values}{}\section{madsqlite\+:\+:Mad\+Content\+Values Class Reference}
 \label{classmadsqlite_1_1_mad_content_values}\index{madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}}
+
+
+{\ttfamily \#include $<$Mad\+Content\+Values.\+hpp$>$}
+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{classmadsqlite_1_1_mad_content_values_a7441e7284d67e99d467fe37cb4120bec}{put\+Integer} (std\+::string const \&key, sqlite3\+\_\+int64 value)
+\hyperlink{classmadsqlite_1_1_mad_content_values_aedbfcbdcbef1b45b02f0cc7dbff8d9f8}{Mad\+Content\+Values} ()
+\item 
+void \hyperlink{classmadsqlite_1_1_mad_content_values_abea262a380af93a516ac1a20c4fdb83b}{put\+Integer} (std\+::string const \&key, long long int value)
 \item 
 void \hyperlink{classmadsqlite_1_1_mad_content_values_a00a8a96f001511a9201b6b6436ae27b7}{put\+Real} (std\+::string const \&key, double value)
 \item 
 void \hyperlink{classmadsqlite_1_1_mad_content_values_ab00bdb442e3f04ff4e3dc7e04d5b68dd}{put\+String} (std\+::string const \&key, std\+::string const \&value)
 \item 
-void \hyperlink{classmadsqlite_1_1_mad_content_values_a372ac7c6da044c9fa95fe01db3d3b166}{put\+Blob} (std\+::string const \&key, std\+::vector$<$ madsqlite\+::byte $>$ \&blob)
+void \hyperlink{classmadsqlite_1_1_mad_content_values_aa4e03f42e0334133f243b2574f39a826}{put\+Blob} (std\+::string const \&key, std\+::vector$<$ unsigned char $>$ \&value)
+\item 
+void \hyperlink{classmadsqlite_1_1_mad_content_values_a3b279685249ca9f12f4c1cfb28ed4fae}{put\+Blob} (std\+::string const \&key, const void $\ast$value, size\+\_\+t sz)
 \item 
 void \hyperlink{classmadsqlite_1_1_mad_content_values_a2415e71ac9c77ca280f9bb8feb433d54}{clear} ()
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Key values container useful for the insertion of data into a \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database}. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classmadsqlite_1_1_mad_content_values_aedbfcbdcbef1b45b02f0cc7dbff8d9f8}{}\label{classmadsqlite_1_1_mad_content_values_aedbfcbdcbef1b45b02f0cc7dbff8d9f8} 
+\index{madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}!Mad\+Content\+Values@{Mad\+Content\+Values}}
+\index{Mad\+Content\+Values@{Mad\+Content\+Values}!madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}}
+\subsubsection{\texorpdfstring{Mad\+Content\+Values()}{MadContentValues()}}
+{\footnotesize\ttfamily madsqlite\+::\+Mad\+Content\+Values\+::\+Mad\+Content\+Values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Create a new content value container instance useful for the insertion of data into a \hyperlink{classmadsqlite_1_1_mad_database}{Mad\+Database}. 
 
 \subsection{Member Function Documentation}
 \hypertarget{classmadsqlite_1_1_mad_content_values_a2415e71ac9c77ca280f9bb8feb433d54}{}\label{classmadsqlite_1_1_mad_content_values_a2415e71ac9c77ca280f9bb8feb433d54} 
@@ -22,11 +42,11 @@ void \hyperlink{classmadsqlite_1_1_mad_content_values_a2415e71ac9c77ca280f9bb8fe
 \subsubsection{\texorpdfstring{clear()}{clear()}}
 {\footnotesize\ttfamily void madsqlite\+::\+Mad\+Content\+Values\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-Removes all values. \hypertarget{classmadsqlite_1_1_mad_content_values_a372ac7c6da044c9fa95fe01db3d3b166}{}\label{classmadsqlite_1_1_mad_content_values_a372ac7c6da044c9fa95fe01db3d3b166} 
+Removes all values. \hypertarget{classmadsqlite_1_1_mad_content_values_aa4e03f42e0334133f243b2574f39a826}{}\label{classmadsqlite_1_1_mad_content_values_aa4e03f42e0334133f243b2574f39a826} 
 \index{madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}!put\+Blob@{put\+Blob}}
 \index{put\+Blob@{put\+Blob}!madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}}
-\subsubsection{\texorpdfstring{put\+Blob()}{putBlob()}}
-{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Content\+Values\+::put\+Blob (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{std\+::vector$<$ madsqlite\+::byte $>$ \&}]{blob }\end{DoxyParamCaption})}
+\subsubsection{\texorpdfstring{put\+Blob()}{putBlob()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Content\+Values\+::put\+Blob (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{std\+::vector$<$ unsigned char $>$ \&}]{value }\end{DoxyParamCaption})}
 
 Adds a value to the set.
 
@@ -37,11 +57,28 @@ Adds a value to the set.
 {\em value} & the data for the value to put. \\
 \hline
 \end{DoxyParams}
-\hypertarget{classmadsqlite_1_1_mad_content_values_a7441e7284d67e99d467fe37cb4120bec}{}\label{classmadsqlite_1_1_mad_content_values_a7441e7284d67e99d467fe37cb4120bec} 
+\hypertarget{classmadsqlite_1_1_mad_content_values_a3b279685249ca9f12f4c1cfb28ed4fae}{}\label{classmadsqlite_1_1_mad_content_values_a3b279685249ca9f12f4c1cfb28ed4fae} 
+\index{madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}!put\+Blob@{put\+Blob}}
+\index{put\+Blob@{put\+Blob}!madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}}
+\subsubsection{\texorpdfstring{put\+Blob()}{putBlob()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Content\+Values\+::put\+Blob (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{const void $\ast$}]{value,  }\item[{size\+\_\+t}]{sz }\end{DoxyParamCaption})}
+
+Adds a value to the set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & the name of the value to put. \\
+\hline
+{\em value} & the data for the value to put. \\
+\hline
+{\em sz} & the size of the value. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classmadsqlite_1_1_mad_content_values_abea262a380af93a516ac1a20c4fdb83b}{}\label{classmadsqlite_1_1_mad_content_values_abea262a380af93a516ac1a20c4fdb83b} 
 \index{madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}!put\+Integer@{put\+Integer}}
 \index{put\+Integer@{put\+Integer}!madsqlite\+::\+Mad\+Content\+Values@{madsqlite\+::\+Mad\+Content\+Values}}
 \subsubsection{\texorpdfstring{put\+Integer()}{putInteger()}}
-{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Content\+Values\+::put\+Integer (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{sqlite3\+\_\+int64}]{value }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void madsqlite\+::\+Mad\+Content\+Values\+::put\+Integer (\begin{DoxyParamCaption}\item[{std\+::string const \&}]{key,  }\item[{long long int}]{value }\end{DoxyParamCaption})}
 
 Adds a value to the set.
 

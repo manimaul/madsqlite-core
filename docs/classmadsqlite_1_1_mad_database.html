@@ -70,13 +70,15 @@ $(function() {
 <div class="title">madsqlite::MadDatabase Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_mad_database_8hpp_source.html">MadDatabase.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adeaa573aff2327d76018be2db2ecf638"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#adeaa573aff2327d76018be2db2ecf638">MadDatabase</a> (Impl *impl)</td></tr>
-<tr class="separator:adeaa573aff2327d76018be2db2ecf638"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9383a29a4411d29a5345cd233e32756d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a9383a29a4411d29a5345cd233e32756d">insert</a> (std::string const &amp;table, <a class="el" href="classmadsqlite_1_1_mad_content_values.html">MadContentValues</a> &amp;values)</td></tr>
-<tr class="separator:a9383a29a4411d29a5345cd233e32756d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11eaaa62452515ae78f3879616862213"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a11eaaa62452515ae78f3879616862213">MadDatabase</a> (std::unique_ptr&lt; Impl &gt; impl)</td></tr>
+<tr class="separator:a11eaaa62452515ae78f3879616862213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29207a153e3a92eec7d718efd4c7b3a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a29207a153e3a92eec7d718efd4c7b3a3">insert</a> (std::string const &amp;table, <a class="el" href="classmadsqlite_1_1_mad_content_values.html">MadContentValues</a> &amp;contentValues)</td></tr>
+<tr class="separator:a29207a153e3a92eec7d718efd4c7b3a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fb119ea383a9d93b7d3a5ddce7bc756"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmadsqlite_1_1_mad_query.html">MadQuery</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a6fb119ea383a9d93b7d3a5ddce7bc756">query</a> (std::string const &amp;sql)</td></tr>
 <tr class="separator:a6fb119ea383a9d93b7d3a5ddce7bc756"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6514212d65ca428fb35ee87b9d3c78af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmadsqlite_1_1_mad_query.html">MadQuery</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a6514212d65ca428fb35ee87b9d3c78af">query</a> (std::string const &amp;sql, std::vector&lt; std::string &gt; const &amp;args)</td></tr>
@@ -96,12 +98,14 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a68c5b61e4cf000f4947f9c43a2c12338"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classmadsqlite_1_1_mad_database.html">MadDatabase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a68c5b61e4cf000f4947f9c43a2c12338">openDatabase</a> (std::string const &amp;dbPath)</td></tr>
 <tr class="separator:a68c5b61e4cf000f4947f9c43a2c12338"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac38e0559a2d724541d8ac7102db4fcd1"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classmadsqlite_1_1_mad_database.html">MadDatabase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#ac38e0559a2d724541d8ac7102db4fcd1">openInMemoryDatabase</a> ()</td></tr>
-<tr class="separator:ac38e0559a2d724541d8ac7102db4fcd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29c3ca4b75520e39977ca37ea71354b6"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classmadsqlite_1_1_mad_database.html">MadDatabase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmadsqlite_1_1_mad_database.html#a29c3ca4b75520e39977ca37ea71354b6">openInMemoryDatabase</a> ()</td></tr>
+<tr class="separator:a29c3ca4b75520e39977ca37ea71354b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="adeaa573aff2327d76018be2db2ecf638"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adeaa573aff2327d76018be2db2ecf638">&sect;&nbsp;</a></span>MadDatabase()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Opens, creates and provides access to a sqlite database. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a11eaaa62452515ae78f3879616862213"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11eaaa62452515ae78f3879616862213">&sect;&nbsp;</a></span>MadDatabase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -109,13 +113,13 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">madsqlite::MadDatabase::MadDatabase </td>
           <td>(</td>
-          <td class="paramtype">Impl *&#160;</td>
+          <td class="paramtype">std::unique_ptr&lt; Impl &gt;&#160;</td>
           <td class="paramname"><em>impl</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>For internal use. see ::openInMemoryDatabase and ::openDatabase </p>
+<p>For internal use. See <a class="el" href="classmadsqlite_1_1_mad_database.html#a68c5b61e4cf000f4947f9c43a2c12338">MadDatabase::openDatabase</a> </p>
 
 </div>
 </div>
@@ -200,8 +204,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9383a29a4411d29a5345cd233e32756d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9383a29a4411d29a5345cd233e32756d">&sect;&nbsp;</a></span>insert()</h2>
+<a id="a29207a153e3a92eec7d718efd4c7b3a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29207a153e3a92eec7d718efd4c7b3a3">&sect;&nbsp;</a></span>insert()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +220,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classmadsqlite_1_1_mad_content_values.html">MadContentValues</a> &amp;&#160;</td>
-          <td class="paramname"><em>values</em>&#160;</td>
+          <td class="paramname"><em>contentValues</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -269,8 +273,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac38e0559a2d724541d8ac7102db4fcd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac38e0559a2d724541d8ac7102db4fcd1">&sect;&nbsp;</a></span>openInMemoryDatabase()</h2>
+<a id="a29c3ca4b75520e39977ca37ea71354b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29c3ca4b75520e39977ca37ea71354b6">&sect;&nbsp;</a></span>openInMemoryDatabase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,7 +283,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classmadsqlite_1_1_mad_database.html">MadDatabase</a>&gt; madsqlite::MadDatabase::openInMemoryDatabase </td>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classmadsqlite_1_1_mad_database.html">MadDatabase</a>&gt; madsqlite::MadDatabase::openInMemoryDatabase </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

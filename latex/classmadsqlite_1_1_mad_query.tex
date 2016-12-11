@@ -1,7 +1,17 @@
 \hypertarget{classmadsqlite_1_1_mad_query}{}\section{madsqlite\+:\+:Mad\+Query Class Reference}
 \label{classmadsqlite_1_1_mad_query}\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+
+
+{\ttfamily \#include $<$Mad\+Query.\+hpp$>$}
+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmadsqlite_1_1_mad_query_a4e7a3212c6dd8c86e5579e43627b9013}{Mad\+Query} (std\+::unique\+\_\+ptr$<$ Impl $>$ impl)
+\item 
+\hyperlink{classmadsqlite_1_1_mad_query_a52f4a1417de26c9e2edb46bae17892ef}{Mad\+Query} (\hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \&other)=delete
+\item 
+\hyperlink{classmadsqlite_1_1_mad_query_a0a4ebbd16bfc54d95fc7a87517d4f21e}{Mad\+Query} (\hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \&\&other)
 \item 
 bool \hyperlink{classmadsqlite_1_1_mad_query_a37a601031ecedf20e53b8c0f610f74b0}{move\+To\+First} ()
 \item 
@@ -11,7 +21,7 @@ bool \hyperlink{classmadsqlite_1_1_mad_query_a0fa757aa8333e3fc53c57442bdf4cad7}{
 \item 
 const std\+::string \hyperlink{classmadsqlite_1_1_mad_query_a63b55fe68d013c3d1fdade2391233cb9}{get\+String} (int column\+Index) const
 \item 
-const std\+::vector$<$ byte $>$ \hyperlink{classmadsqlite_1_1_mad_query_ade5b4bc30c7876eeeb62e2f0bb8fc111}{get\+Blob} (int column\+Index) const
+const std\+::vector$<$ unsigned char $>$ \hyperlink{classmadsqlite_1_1_mad_query_a4f39ec059990e88d11b3d11244283000}{get\+Blob} (int column\+Index) const
 \item 
 long long int \hyperlink{classmadsqlite_1_1_mad_query_ab04d59c89fccfd773f77276219f4d376}{get\+Int} (int column\+Index)
 \item 
@@ -19,12 +29,43 @@ double \hyperlink{classmadsqlite_1_1_mad_query_ab1d5375285453976e078f320c73e224f
 \end{DoxyCompactItemize}
 
 
+\subsection{Detailed Description}
+Provides read access to the result set returned by a sqlite database query. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classmadsqlite_1_1_mad_query_a4e7a3212c6dd8c86e5579e43627b9013}{}\label{classmadsqlite_1_1_mad_query_a4e7a3212c6dd8c86e5579e43627b9013} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!Mad\+Query@{Mad\+Query}}
+\index{Mad\+Query@{Mad\+Query}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{Mad\+Query()}{MadQuery()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily madsqlite\+::\+Mad\+Query\+::\+Mad\+Query (\begin{DoxyParamCaption}\item[{std\+::unique\+\_\+ptr$<$ Impl $>$}]{impl }\end{DoxyParamCaption})}
+
+For internal use. \hypertarget{classmadsqlite_1_1_mad_query_a52f4a1417de26c9e2edb46bae17892ef}{}\label{classmadsqlite_1_1_mad_query_a52f4a1417de26c9e2edb46bae17892ef} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!Mad\+Query@{Mad\+Query}}
+\index{Mad\+Query@{Mad\+Query}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{Mad\+Query()}{MadQuery()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily madsqlite\+::\+Mad\+Query\+::\+Mad\+Query (\begin{DoxyParamCaption}\item[{\hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+Copying a query is disallowed. \hypertarget{classmadsqlite_1_1_mad_query_a0a4ebbd16bfc54d95fc7a87517d4f21e}{}\label{classmadsqlite_1_1_mad_query_a0a4ebbd16bfc54d95fc7a87517d4f21e} 
+\index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!Mad\+Query@{Mad\+Query}}
+\index{Mad\+Query@{Mad\+Query}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
+\subsubsection{\texorpdfstring{Mad\+Query()}{MadQuery()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily madsqlite\+::\+Mad\+Query\+::\+Mad\+Query (\begin{DoxyParamCaption}\item[{\hyperlink{classmadsqlite_1_1_mad_query}{Mad\+Query} \&\&}]{other }\end{DoxyParamCaption})}
+
+Moving a query is allowed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & the query to move. \\
+\hline
+\end{DoxyParams}
+
+
 \subsection{Member Function Documentation}
-\hypertarget{classmadsqlite_1_1_mad_query_ade5b4bc30c7876eeeb62e2f0bb8fc111}{}\label{classmadsqlite_1_1_mad_query_ade5b4bc30c7876eeeb62e2f0bb8fc111} 
+\hypertarget{classmadsqlite_1_1_mad_query_a4f39ec059990e88d11b3d11244283000}{}\label{classmadsqlite_1_1_mad_query_a4f39ec059990e88d11b3d11244283000} 
 \index{madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}!get\+Blob@{get\+Blob}}
 \index{get\+Blob@{get\+Blob}!madsqlite\+::\+Mad\+Query@{madsqlite\+::\+Mad\+Query}}
 \subsubsection{\texorpdfstring{get\+Blob()}{getBlob()}}
-{\footnotesize\ttfamily const std\+::vector$<$byte$>$ madsqlite\+::\+Mad\+Query\+::get\+Blob (\begin{DoxyParamCaption}\item[{int}]{column\+Index }\end{DoxyParamCaption}) const}
+{\footnotesize\ttfamily const std\+::vector$<$unsigned char$>$ madsqlite\+::\+Mad\+Query\+::get\+Blob (\begin{DoxyParamCaption}\item[{int}]{column\+Index }\end{DoxyParamCaption}) const}
 
 
 \begin{DoxyParams}{Parameters}
