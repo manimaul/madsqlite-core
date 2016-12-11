@@ -10,6 +10,9 @@
 
 namespace madsqlite {
 
+/**
+ * Provides read access to the result set returned by a sqlite database query.
+ */
 class MadQuery {
 
 private:
@@ -39,7 +42,7 @@ public:
      */
     MadQuery(MadQuery &&other);
 
-    ~MadQuery();
+    virtual ~MadQuery();
 
     /**
      * Move the query to the first row.

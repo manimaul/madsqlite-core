@@ -17,6 +17,8 @@ using namespace std;
 
 MadContentValues::MadContentValues() : impl(new Impl()) {}
 
+MadContentValues::~MadContentValues() {}
+
 //endregion
 
 //region MadContentValues::Impl Constructor

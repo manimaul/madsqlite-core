@@ -44,12 +44,11 @@ public:
      * See MadDatabase::openDatabase
      */
     MadDatabase(std::unique_ptr<Impl> impl);
-
     virtual ~MadDatabase();
 
 //endregion
 
-//region Public Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//region Public Methods 
 
 public:
 

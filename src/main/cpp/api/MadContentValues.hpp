@@ -11,7 +11,7 @@
 namespace madsqlite {
 
 /**
- * Key values container useful for insertion of data into a MadDatabase.
+ * Key values container useful for the insertion of data into a MadDatabase.
  */
 class MadContentValues {
 
@@ -26,9 +26,11 @@ private:
 public:
 
     /**
-     * Create a new content value container instance.
+     * Create a new content value container instance useful for the insertion of data into a MadDatabase.
      */
     MadContentValues();
+
+    virtual ~MadContentValues();
 
     /**
      * Adds a value to the set.
