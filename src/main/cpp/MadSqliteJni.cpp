@@ -73,7 +73,7 @@ int jobjectToInteger(JNIEnv *env, jobject &value) {
     return env->CallIntMethod(value, intValueMethodId);
 }
 
-sqlite3_int64 jobjectToLong(JNIEnv *env, jobject &value) {
+long long int jobjectToLong(JNIEnv *env, jobject &value) {
     return env->CallLongMethod(value, longValueMethodId);
 }
 
@@ -309,7 +309,7 @@ Java_io_madrona_madsqlite_JniBridge_openDatabase(JNIEnv *env,
         return retVal;
     } else {
         auto ptr = MadDatabase::openInMemoryDatabase();
-        dbPtrs.push_back(ptr);
+        dbPtrs.push_back(std::unique_ptr<MadDatabase>(std::move(ptr)));
         return reinterpret_cast<jlong>(ptr.get());
     }
 }

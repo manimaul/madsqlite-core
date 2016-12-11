@@ -9,12 +9,13 @@
 #include "MadContentValuesImpl.hpp"
 #include <iostream>
 #include <memory>
+#include <mutex>
 
 using namespace madsqlite;
 using namespace std;
 
-static mutex databaseMutex = {};
-static unordered_map<string, weak_ptr<MadDatabase>> databaseSet = {};
+static mutex databaseMutex;
+static unordered_map<string, weak_ptr<MadDatabase>> databaseSet;
 
 //region MadDatabase Constructor
 
