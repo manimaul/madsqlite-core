@@ -62,7 +62,7 @@ public:
      * @param key the name of the value to put.
      * @param value the data for the value to put.
      */
-    void putBlob(std::string const &key, std::vector<unsigned char> &value);
+    void putBlob(std::string const &key, std::vector<unsigned char> const &value);
 
     /**
      * Adds a value to the set.

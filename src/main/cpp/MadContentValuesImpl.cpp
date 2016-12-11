@@ -50,7 +50,7 @@ void MadContentValues::putString(string const &key, string const &value) {
     impl->putData(key, d);
 }
 
-void MadContentValues::putBlob(string const &key, vector<unsigned char> &value) {
+void MadContentValues::putBlob(string const &key, vector<unsigned char> const &value) {
     MadContentValues::Impl::Data d = {value};
     impl->putData(key, d);
 }
