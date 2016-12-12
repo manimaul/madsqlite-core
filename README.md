@@ -12,11 +12,11 @@
 | [MadSqlite iOS Swift](https://github.com/manimaul/madsqlite-ios-swift) | Swift
 
 ##Documentation - Simple API
-[MMadContentValues.hpp](/blob/master/src/main/cpp/api/MadContentValues.hpp)
-[MadQuery.hpp](/blob/master/src/main/cpp/api/MadQuery.hpp)
-[MadDatabase.hpp](/blob/master/src/main/cpp/api/MadDatabase.hpp)
+* [MadContentValues.hpp](/src/main/cpp/api/MadContentValues.hpp)
+* [MadQuery.hpp](/src/main/cpp/api/MadQuery.hpp)
+* [MadDatabase.hpp](/src/main/cpp/api/MadDatabase.hpp)
 OR
-[API (Doxygen) Class List](https://manimaul.github.io/madsqlite-core/annotated.html)
+* [API (Doxygen) Class List](https://manimaul.github.io/madsqlite-core/annotated.html)
 
 ####Example
 ```cpp
