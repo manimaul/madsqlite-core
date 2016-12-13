@@ -15,7 +15,9 @@
 * [MadContentValues.hpp](/src/main/cpp/api/MadContentValues.hpp)
 * [MadQuery.hpp](/src/main/cpp/api/MadQuery.hpp)
 * [MadDatabase.hpp](/src/main/cpp/api/MadDatabase.hpp)
+
 OR
+
 * [API (Doxygen) Class List](https://manimaul.github.io/madsqlite-core/annotated.html)
 
 ####Example
