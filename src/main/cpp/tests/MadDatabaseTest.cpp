@@ -85,6 +85,73 @@ TEST(MadDatabaseTests, Async) {
 
 }
 
+TEST(MadDatabaseTests, TransactionRollBack) {
+    string dbFileName = "test_trans_db.s3db";
+    remove(dbFileName.c_str());
+
+    auto db = MadDatabase::openDatabase(dbFileName);
+    db->exec("CREATE TABLE location_table(name TEXT, latitude REAL, longitude REAL, image BLOB);");
+    EXPECT_EQ("", db->getError());
+
+    db->beginTransaction();
+
+    auto cv = MadContentValues();
+
+    cv.putString("name", "Cheshire Cat");
+    cv.putReal("latitude", 51.2414945);
+    cv.putReal("longitude", -0.6354629);
+    db->insert("location_table", cv);
+
+    cv.clear();
+    cv.putString("name", "Alice");
+    cv.putReal("latitude", 51.2414945);
+    cv.putReal("longitude", -0.6354629);
+    db->insert("location_table", cv);
+
+    db->rollbackTransaction();
+
+    auto query = db->query("SELECT * FROM location_table;");
+    EXPECT_EQ("", db->getError());
+    EXPECT_FALSE(query.moveToFirst());
+    EXPECT_TRUE(query.isAfterLast());
+}
+
+TEST(MadDatabaseTests, TransactionCommit) {
+    string dbFileName = "test_trans_db.s3db";
+    remove(dbFileName.c_str());
+
+    auto db = MadDatabase::openDatabase(dbFileName);
+    db->exec("CREATE TABLE location_table(name TEXT, latitude REAL, longitude REAL, image BLOB);");
+    EXPECT_EQ("", db->getError());
+
+    db->beginTransaction();
+
+    auto cv = MadContentValues();
+    cv.putString("name", "Cheshire Cat");
+    cv.putReal("latitude", 51.2414945);
+    cv.putReal("longitude", -0.6354629);
+    db->insert("location_table", cv);
+
+    db->commitTransaction();
+
+    auto query = db->query("SELECT * FROM location_table;");
+    EXPECT_EQ("", db->getError());
+    EXPECT_TRUE(query.moveToFirst());
+    EXPECT_FALSE(query.isAfterLast());
+}
+
+TEST(MadDatabaseTests, Empty) {
+    auto db = MadDatabase::openInMemoryDatabase();
+    db->exec("CREATE TABLE test(keyInt INTEGER);");
+    EXPECT_EQ("", db->getError());
+
+    auto query = db->query("SELECT * FROM test;");
+    EXPECT_EQ("", db->getError());
+    EXPECT_FALSE(query.moveToFirst());
+    EXPECT_TRUE(query.isAfterLast());
+    EXPECT_FALSE(query.moveToNext());
+}
+
 TEST(MadDatabaseTests, InsertInteger) {
     auto db = MadDatabase::openInMemoryDatabase();
     db->exec("CREATE TABLE test(keyInt INTEGER);");

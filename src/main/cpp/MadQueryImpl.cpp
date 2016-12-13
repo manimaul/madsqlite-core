@@ -82,7 +82,7 @@ bool MadQuery::Impl::moveToFirst() {
     if (sqlite3_reset(statement) == SQLITE_OK) {
         stepResult = sqlite3_step(statement);
         position = 0;
-        if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
+        if (stepResult == SQLITE_ROW) {
             return true;
         }
     }
