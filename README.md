@@ -9,7 +9,7 @@
 | [MadSqlite Core](https://github.com/manimaul/madsqlite-core) | C++14 |[![Build Status](https://travis-ci.org/manimaul/madsqlite-core.svg?branch=master)](https://travis-ci.org/manimaul/madsqlite-core) |
 | [MadSqlite Android](https://github.com/manimaul/madsqlite-android) | Java | [![Build Status](https://travis-ci.org/manimaul/madsqlite-android.svg?branch=master)](https://travis-ci.org/manimaul/madsqlite-android) |
 | [MadSqlite iOS Obj-c](https://github.com/manimaul/madsqlite-ios-objc) | Objective-C  | [![Build Status](https://travis-ci.org/manimaul/madsqlite-ios-objc.svg?branch=master)](https://travis-ci.org/manimaul/madsqlite-ios-objc) |
-| [MadSqlite iOS Swift](https://github.com/manimaul/madsqlite-ios-swift) | Swift
+| [MadSqlite iOS Swift](https://github.com/manimaul/madsqlite-ios-swift) | Swift | [![Build Status](https://travis-ci.org/manimaul/madsqlite-ios-swift.svg?branch=master)](https://travis-ci.org/manimaul/madsqlite-ios-swift) |
 
 ##Documentation - Simple API
 * [MadContentValues.hpp](/src/main/cpp/api/MadContentValues.hpp)
