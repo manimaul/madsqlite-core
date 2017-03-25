@@ -40,9 +40,11 @@ MadDatabase::Impl::Impl(string const &dbPath) {
 MadDatabase::Impl::~Impl() {
     lock_guard<mutex> guard(databaseMutex);
     sqlite3_close(db);
-    for (auto itr = databaseSet.begin(); itr != databaseSet.end(); ++itr) {
+    for (auto itr = databaseSet.begin(); itr != databaseSet.end();) {
         if (itr->second.expired()) {
-            databaseSet.erase(itr);
+            itr = databaseSet.erase(itr);
+        } else {
+            ++itr;
         }
     }
 }
